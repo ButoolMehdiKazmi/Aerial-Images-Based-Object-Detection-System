@@ -1,703 +1,338 @@
 <!DOCTYPE html>
-<!-- saved from url=(0049)file:///C:/Users/91904/Downloads/login%20(6).html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Aerial Insights</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
-
-        ::-webkit-scrollbar { width:6px; }
-        ::-webkit-scrollbar-thumb { background:linear-gradient(135deg,#3a86ff,#8338ec); border-radius:4px; }
-
-        html { scroll-snap-type:y mandatory; scroll-behavior:smooth; }
-        body { overflow-x:hidden; background:#0d1117; }
-
-        /* ===== NAVBAR ===== */
-        .header {
-            background:rgba(13,17,23,0.9); backdrop-filter:blur(20px);
-            -webkit-backdrop-filter:blur(20px);
-            position:fixed; top:0; left:0; right:0;
-            z-index:1000; padding:12px 0; width:100%;
-            transition:all 0.3s;
-        }
-        .header.scrolled { background:rgba(13,17,23,0.98); }
-        .header .container {
-            max-width:1200px; margin:0 auto; padding:0 40px;
-            display:flex; justify-content:space-between; align-items:center;
-        }
-        .logo a {
-            font-size:1.4rem; font-weight:700; text-decoration:none;
-            background:linear-gradient(135deg,#fff,#3a86ff);
-            -webkit-background-clip:text; background-clip:text; color:transparent;
-        }
-        .nav-list { display:flex; list-style:none; gap:30px; align-items:center; }
-        .nav-list a {
-            color:rgba(255,255,255,0.7); text-decoration:none; font-weight:500;
-            transition:color 0.2s; position:relative;
-        }
-        .nav-list a::after {
-            content:''; position:absolute; bottom:-5px; left:0;
-            width:0; height:2px;
-            background:linear-gradient(135deg,#3a86ff,#8338ec);
-            transition:width 0.3s; border-radius:2px;
-        }
-        .nav-list a:hover { color:#fff; }
-        .nav-list a:hover::after { width:100%; }
-
-        /* ===================== SCREEN 1: HERO ===================== */
-        .screen-hero {
-            height:100vh; width:100%;
-            scroll-snap-align:start;
-            background:linear-gradient(135deg,#2c3e50 0%,#1a252f 40%,#0d1117 100%);
-            display:flex; flex-direction:column;
-            justify-content:center; align-items:center;
-            position:relative; overflow:hidden;
-        }
-        .screen-hero::before {
-            content:''; position:absolute; inset:0;
-            background:
-                radial-gradient(ellipse at 20% 30%,rgba(58,134,255,0.18) 0%,transparent 55%),
-                radial-gradient(ellipse at 80% 70%,rgba(131,56,236,0.18) 0%,transparent 55%),
-                radial-gradient(ellipse at 60% 10%,rgba(52,152,219,0.12) 0%,transparent 40%);
-            animation:pulse 8s ease-in-out infinite;
-        }
-        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.7;transform:scale(1.05);} }
-        .screen-hero::after {
-            content:''; position:absolute; inset:0;
-            background-image:radial-gradient(circle,rgba(255,255,255,0.06) 1px,transparent 1px);
-            background-size:40px 40px;
-        }
-
-        .orb { position:absolute; border-radius:50%; filter:blur(60px); animation:floatOrb 10s ease-in-out infinite; pointer-events:none; z-index:0; }
-        .orb-1 { width:350px;height:350px;background:rgba(58,134,255,0.12);top:-80px;left:-80px;animation-delay:0s; }
-        .orb-2 { width:280px;height:280px;background:rgba(131,56,236,0.12);bottom:-60px;right:-60px;animation-delay:3s; }
-        .orb-3 { width:200px;height:200px;background:rgba(52,152,219,0.1);top:40%;right:15%;animation-delay:6s; }
-        @keyframes floatOrb { 0%,100%{transform:translate(0,0);} 33%{transform:translate(20px,-20px);} 66%{transform:translate(-15px,15px);} }
-
-        .hero-content { position:relative; z-index:2; text-align:center; max-width:800px; padding:0 30px; }
-
-        .hero-badge {
-            display:inline-flex; align-items:center; gap:8px;
-            background:rgba(255,255,255,0.07); backdrop-filter:blur(12px);
-            border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.85);
-            padding:8px 20px; border-radius:50px;
-            font-size:0.78rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
-            margin-bottom:32px; opacity:0; animation:fadeIn 0.8s ease 0.2s forwards;
-        }
-        .hero-badge .dot { width:6px;height:6px;background:#3a86ff;border-radius:50%;box-shadow:0 0 6px #3a86ff;animation:blink 1.5s ease-in-out infinite; }
-        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
-        .hero-title {
-            font-size:4rem; font-weight:700; line-height:1.15; color:white; margin-bottom:22px;
-            opacity:0; transform:translateY(30px); animation:slideUp 0.9s ease 0.4s forwards;
-        }
-        .hero-title .gradient-text {
-            background:linear-gradient(135deg,#3a86ff,#8338ec,#3498db);
-            -webkit-background-clip:text; background-clip:text; color:transparent;
-        }
-        .hero-sub {
-            font-size:1.1rem; color:rgba(255,255,255,0.55); max-width:560px;
-            margin:0 auto 50px; line-height:1.75;
-            opacity:0; transform:translateY(20px); animation:slideUp 0.9s ease 0.6s forwards;
-        }
-
-        .stats-row {
-            display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:55px;
-            opacity:0; animation:fadeIn 0.8s ease 0.9s forwards;
-        }
-        .stat-pill {
-            background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
-            backdrop-filter:blur(10px); border-radius:12px; padding:14px 22px;
-            text-align:center; min-width:110px;
-        }
-        .stat-pill .num {
-            display:block; font-size:1.5rem; font-weight:700;
-            background:linear-gradient(135deg,#3a86ff,#8338ec);
-            -webkit-background-clip:text; background-clip:text; color:transparent;
-        }
-        .stat-pill .lbl { font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px; }
-
-        .scroll-cta { display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeIn 0.8s ease 1.2s forwards;cursor:pointer; }
-        .scroll-cta span { font-size:0.8rem;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase; }
-        .scroll-arrow {
-            width:38px;height:38px;border:1px solid rgba(255,255,255,0.15);border-radius:50%;
-            display:flex;align-items:center;justify-content:center;
-            animation:bounce 2s ease-in-out infinite; transition:border-color 0.3s,background 0.3s;
-        }
-        .scroll-cta:hover .scroll-arrow { border-color:#3a86ff; background:rgba(58,134,255,0.1); }
-        .scroll-arrow i { color:rgba(255,255,255,0.5);font-size:0.85rem; }
-        @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
-
-        /* ===================== SCREEN 2: FLIP AUTH ===================== */
-        .screen-auth {
-            height:100vh; width:100%;
-            scroll-snap-align:start;
-            display:flex; align-items:center; justify-content:center;
-            background:linear-gradient(145deg,#0d1117 0%,#1a252f 50%,#0d1117 100%);
-            position:relative; overflow:hidden;
-        }
-        .screen-auth::before {
-            content:''; position:absolute; inset:0;
-            background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);
-            background-size:36px 36px;
-        }
-        .screen-auth::after {
-            content:''; position:absolute; inset:0;
-            background:
-                radial-gradient(ellipse at 10% 50%,rgba(58,134,255,0.1) 0%,transparent 50%),
-                radial-gradient(ellipse at 90% 50%,rgba(131,56,236,0.1) 0%,transparent 50%);
-        }
-
-        .flip-container {
-            width:920px; height:580px;
-            perspective:1400px;
-            position:relative; z-index:2;
-        }
-
-        .flip-inner {
-            width:100%; height:100%;
-            position:relative;
-            transform-style:preserve-3d;
-            transition:transform 0.8s cubic-bezier(0.77,0,0.175,1);
-        }
-        .flip-inner.flipped { transform:rotateY(180deg); }
-
-        .flip-front, .flip-back {
-            position:absolute; inset:0;
-            backface-visibility:hidden;
-            -webkit-backface-visibility:hidden;
-            border-radius:24px;
-            overflow:hidden;
-            display:flex;
-            box-shadow:0 30px 80px rgba(0,0,0,0.5);
-        }
-        .flip-back { transform:rotateY(180deg); }
-
-        /* When showing register (flipped), front face must not block clicks */
-        .flip-inner.flipped .flip-front { pointer-events:none; }
-        /* When showing login (not flipped), back face must not block clicks */
-        .flip-inner:not(.flipped) .flip-back { pointer-events:none; }
-
-        .auth-deco {
-            width:42%;
-            display:flex; flex-direction:column;
-            justify-content:center; padding:50px 40px;
-            position:relative; overflow:hidden;
-        }
-        .auth-deco.login-deco  { background:linear-gradient(145deg,#2c3e50,#1e3a5f,#1a1a2e); }
-        .auth-deco.reg-deco    { background:linear-gradient(145deg,#1a1a2e,#2d1b69,#1a252f); }
-
-        .auth-deco::before {
-            content:''; position:absolute; inset:0;
-            background-image:radial-gradient(circle,rgba(255,255,255,0.06) 1px,transparent 1px);
-            background-size:28px 28px;
-        }
-        .deco-glow { position:absolute; border-radius:50%; filter:blur(50px); pointer-events:none; }
-        .login-deco .deco-glow  { width:200px;height:200px;background:rgba(58,134,255,0.2);top:-40px;right:-40px; }
-        .reg-deco   .deco-glow  { width:200px;height:200px;background:rgba(131,56,236,0.2);bottom:-40px;left:-40px; }
-
-        .deco-logo { display:flex;align-items:center;gap:10px;margin-bottom:40px;position:relative;z-index:1; }
-        .deco-logo-icon { width:38px;height:38px;background:linear-gradient(135deg,#3a86ff,#8338ec);border-radius:9px;display:flex;align-items:center;justify-content:center; }
-        .deco-logo-icon i { color:white;font-size:1rem; }
-        .deco-logo-text { font-size:1.1rem;font-weight:700;color:white; }
-        .deco-logo-text span { color:#3a86ff; }
-
-        .deco-title { font-size:1.8rem;font-weight:700;color:white;line-height:1.25;margin-bottom:12px;position:relative;z-index:1; }
-        .deco-title .hl { background:linear-gradient(135deg,#3a86ff,#8338ec);-webkit-background-clip:text;background-clip:text;color:transparent; }
-        .reg-deco .deco-title .hl { background:linear-gradient(135deg,#8338ec,#ff6b9d);-webkit-background-clip:text;background-clip:text;color:transparent; }
-
-        .deco-desc { color:rgba(255,255,255,0.45);font-size:0.85rem;line-height:1.65;margin-bottom:36px;position:relative;z-index:1; }
-
-        .deco-features { display:flex;flex-direction:column;gap:14px;position:relative;z-index:1; }
-        .deco-feat { display:flex;align-items:center;gap:10px; }
-        .deco-feat-dot { width:7px;height:7px;border-radius:50%;flex-shrink:0; }
-        .login-deco .deco-feat-dot { background:linear-gradient(135deg,#3a86ff,#8338ec); }
-        .reg-deco   .deco-feat-dot { background:linear-gradient(135deg,#8338ec,#ff6b9d); }
-        .deco-feat span { color:rgba(255,255,255,0.6);font-size:0.82rem; }
-
-        .deco-switch {
-            position:absolute;bottom:36px;left:40px;right:40px;z-index:1;
-            background:rgba(255,255,255,0.07);
-            border:1px solid rgba(255,255,255,0.12);
-            color:rgba(255,255,255,0.7);
-            padding:11px 18px; border-radius:10px;
-            font-size:0.82rem; font-weight:500;
-            cursor:pointer; text-align:center;
-            transition:all 0.3s; backdrop-filter:blur(8px);
-            display:flex;align-items:center;justify-content:center;gap:8px;
-        }
-        .deco-switch:hover { background:rgba(255,255,255,0.13); color:white; }
-        .deco-switch i { font-size:0.8rem; }
-
-        .auth-form-wrap {
-            flex:1;
-            background:#f8f9ff;
-            display:flex; align-items:center; justify-content:center;
-            padding:40px 44px;
-        }
-        .auth-form-wrap.reg-wrap { background:#fdf8ff; }
-
-        .auth-form { width:100%; max-width:320px; }
-
-        .form-header { margin-bottom:24px; }
-        .form-tag {
-            display:inline-flex;align-items:center;gap:5px;
-            font-size:0.68rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-            padding:4px 11px;border-radius:20px;margin-bottom:10px;
-        }
-        .form-tag.login-tag { background:rgba(58,134,255,0.1);color:#3a86ff;border:1px solid rgba(58,134,255,0.2); }
-        .form-tag.reg-tag   { background:rgba(131,56,236,0.1);color:#8338ec;border:1px solid rgba(131,56,236,0.2); }
-        .form-header h2 { font-size:1.55rem;font-weight:700;color:#2c3e50;margin-bottom:3px; }
-        .form-header p  { color:#6c757d;font-size:0.82rem; }
-
-        /* form fields */
-        .fg { margin-bottom:13px; }
-        .fg label { display:block;font-size:0.75rem;font-weight:600;color:#2c3e50;margin-bottom:5px;letter-spacing:0.3px; }
-
-        /* ===== FIXED INPUT WRAPPER ===== */
-        .iw { position:relative; }
-        .iw .ico {
-            position:absolute; left:12px; top:50%; transform:translateY(-50%);
-            color:#adb5bd; font-size:0.82rem; pointer-events:none; transition:color 0.3s;
-            z-index:2;
-        }
-        .iw:focus-within .ico { color:#3a86ff; }
-        .iw input {
-            width:100%; padding:11px 38px 11px 36px;
-            border:2px solid #e9ecef; border-radius:9px;
-            font-size:0.85rem; color:#2c3e50; background:#f8f9fa;
-            outline:none; transition:all 0.3s;
-        }
-        .iw input:focus { border-color:#3a86ff;background:white;box-shadow:0 0 0 4px rgba(58,134,255,0.08); }
-        .reg-wrap .iw input:focus { border-color:#8338ec;box-shadow:0 0 0 4px rgba(131,56,236,0.08); }
-        input::placeholder { color:#adb5bd;font-size:0.82rem; }
-
-        /* ===== SINGLE EYE ICON ===== */
-        .eye {
-            position:absolute; right:11px; top:50%; transform:translateY(-50%);
-            color:#adb5bd; cursor:pointer; font-size:0.82rem;
-            transition:color 0.3s; z-index:999; pointer-events:all;
-            background:none; border:none; padding:4px;
-            display:flex; align-items:center; justify-content:center;
-        }
-        .eye:hover { color:#3a86ff; }
-
-        /* two col row for name fields */
-        .fg-row { display:flex;gap:10px; }
-        .fg-row .fg { flex:1;margin-bottom:13px; }
-
-        .form-row { display:flex;align-items:center;justify-content:space-between;margin-bottom:16px; }
-        .chk { display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#6c757d;cursor:pointer; }
-        .chk input { width:14px;height:14px;accent-color:#3a86ff;padding:0;cursor:pointer; }
-        .fgt { font-size:0.78rem;color:#3a86ff;text-decoration:none;font-weight:500;transition:color 0.2s; }
-        .fgt:hover { color:#8338ec; }
-
-        .terms { display:flex;align-items:flex-start;gap:7px;margin-bottom:16px; }
-        .terms input { width:14px;height:14px;accent-color:#8338ec;padding:0;cursor:pointer;margin-top:2px;flex-shrink:0; }
-        .terms span { font-size:0.76rem;color:#6c757d;line-height:1.4; }
-        .terms a { color:#8338ec;font-weight:500;text-decoration:none; }
-
-        .btn-submit {
-            width:100%;padding:12px;border:none;border-radius:9px;
-            font-size:0.9rem;font-weight:600;cursor:pointer;
-            transition:all 0.3s;position:relative;overflow:hidden;letter-spacing:0.3px;color:white;
-        }
-        .btn-submit.btn-login { background:linear-gradient(135deg,#3a86ff,#8338ec); }
-        .btn-submit.btn-reg   { background:linear-gradient(135deg,#8338ec,#ff6b9d); }
-        .btn-submit::after {
-            content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
-            transition:left 0.5s;
-        }
-        .btn-submit:hover::after { left:100%; }
-        .btn-submit:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(58,134,255,0.35); }
-        .btn-submit.btn-reg:hover { box-shadow:0 8px 24px rgba(131,56,236,0.35); }
-        .btn-submit i { margin-right:6px; }
-
-        .divider { display:flex;align-items:center;gap:10px;margin:14px 0; }
-        .divider::before,.divider::after { content:'';flex:1;height:1px;background:#e9ecef; }
-        .divider span { color:#adb5bd;font-size:0.7rem;white-space:nowrap; }
-
-        .social-row { display:flex;gap:8px; }
-        .btn-soc {
-            flex:1;padding:9px;border:2px solid #e9ecef;border-radius:9px;
-            background:white;cursor:pointer;font-size:0.75rem;font-weight:500;color:#2c3e50;
-            display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.3s;
-        }
-        .btn-soc:hover { border-color:#3a86ff;background:rgba(58,134,255,0.04);transform:translateY(-2px); }
-        .btn-soc.g i { color:#ea4335; }
-        .btn-soc.m i { color:#00a1f1; }
-
-        .switch-note { text-align:center;margin-top:14px;font-size:0.78rem;color:#6c757d; }
-        .switch-note a { color:#3a86ff;font-weight:600;text-decoration:none;cursor:pointer; }
-        .switch-note a:hover { color:#8338ec; }
-        .reg-wrap .switch-note a { color:#8338ec; }
-
-        /* ===== STRENGTH BAR ===== */
-        .strength-bar { height:3px;border-radius:3px;background:#e9ecef;margin-top:5px;overflow:hidden; }
-        .strength-fill { height:100%;width:0%;border-radius:3px;transition:all 0.4s; }
-
-        /* ===== INLINE PASSWORD ERROR MESSAGE ===== */
-        .pw-msg {
-            font-size:0.72rem;
-            margin-top:5px;
-            min-height:16px;
-            transition:all 0.3s;
-            display:block;
-        }
-        .pw-msg.error { color:#ff6b6b; }
-        .pw-msg.success { color:#00b894; }
-
-        @keyframes fadeIn { to{opacity:1;} }
-        @keyframes slideUp { to{opacity:1;transform:translateY(0);} }
-
-        @media(max-width:860px){
-            .flip-container { width:96vw;height:auto;min-height:580px; }
-            .auth-deco { display:none; }
-            .auth-form-wrap { padding:40px 28px; }
-        }
-        @media(max-width:480px){
-            .hero-title{font-size:2.2rem;}
-            .stats-row{gap:10px;}
-            .stat-pill{min-width:80px;padding:10px 12px;}
-            .fg-row{flex-direction:column;gap:0;}
-        }
-
-        /* Hide browser default password reveal icon */
-input[type="password"]::-ms-reveal,
-input[type="password"]::-ms-clear {
-    display: none;
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In — AerialView Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#FF2D2D;--red2:#FF6B35;--cyan:#00D4FF;--teal:#00FFB3;
+  --bg:#060810;--bg2:#0C0F1A;--panel:#0F1320;
+  --glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#E2E8F0;--muted:#64748B;--faint:#2A3042;
+  --font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased;}
+::selection{background:rgba(0,212,255,0.25);color:#fff;}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.scan-line{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.scan-line::before{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.4),transparent);animation:scanDown 8s linear infinite;top:-1px;}
+@keyframes scanDown{0%{top:-1px}100%{top:100%}}
+.grid-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.025) 1px,transparent 1px);background-size:50px 50px;}
 
-/* For newer Edge/Chrome */
-input[type="password"]::-webkit-credentials-auto-fill-button,
-input[type="password"]::-webkit-password-toggle-button {
-    display: none !important;
+/* ── layout ── */
+.page{position:relative;z-index:2;min-height:100vh;display:flex;}
+
+/* ── left panel ── */
+.left-panel{flex:1;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(0,212,255,0.04),rgba(255,45,45,0.04));border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px;}
+.left-panel::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=1000&q=70') center/cover;opacity:0.07;}
+.lp-inner{position:relative;z-index:1;max-width:400px;}
+.lp-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:32px;}
+.lp-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:pulse 1.5s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.lp-h{font-size:clamp(2rem,3.5vw,3rem);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1.05;margin-bottom:16px;}
+.lp-h span{background:linear-gradient(135deg,var(--cyan),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.lp-sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:40px;}
+.lp-stats{display:flex;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.lp-stat{padding:16px 24px;text-align:center;border-right:1px solid var(--border);flex:1;}
+.lp-stat:last-child{border-right:none;}
+.ls-val{font-family:var(--mono);font-size:1.4rem;font-weight:300;color:#fff;line-height:1;}
+.ls-val span{background:linear-gradient(135deg,var(--cyan),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ls-lbl{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:4px;font-family:var(--mono);}
+.hud-chip{position:absolute;background:rgba(6,8,16,0.88);border:1px solid var(--border);border-radius:8px;padding:10px 14px;backdrop-filter:blur(12px);font-family:var(--mono);animation:floatBob 4s ease-in-out infinite;}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.hud-chip.hc1{bottom:120px;left:40px;animation-delay:0s;}
+.hud-chip.hc2{top:100px;right:40px;animation-delay:1.8s;}
+.hc-v{font-size:1.1rem;font-weight:300;color:#fff;line-height:1;}
+.hc-v.c{background:linear-gradient(135deg,var(--cyan),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hc-v.r{background:linear-gradient(135deg,var(--red),var(--red2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hc-l{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.corner{position:absolute;pointer-events:none;}
+.corner::before,.corner::after{content:'';position:absolute;background:rgba(0,212,255,0.3);}
+.c-tl{top:24px;left:24px;}.c-tl::before{top:0;left:0;width:16px;height:1px}.c-tl::after{top:0;left:0;width:1px;height:16px}
+.c-tr{top:24px;right:24px;}.c-tr::before{top:0;right:0;width:16px;height:1px}.c-tr::after{top:0;right:0;width:1px;height:16px}
+.c-bl{bottom:24px;left:24px;}.c-bl::before{bottom:0;left:0;width:16px;height:1px}.c-bl::after{bottom:0;left:0;width:1px;height:16px}
+.c-br{bottom:24px;right:24px;}.c-br::before{bottom:0;right:0;width:16px;height:1px}.c-br::after{bottom:0;right:0;width:1px;height:16px}
+
+/* ── right panel ── */
+.right-panel{width:480px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:60px 52px;overflow-y:auto;background:var(--bg2);position:relative;}
+.form-nav{position:absolute;top:28px;left:52px;right:52px;display:flex;align-items:center;justify-content:space-between;}
+.form-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand-badge{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--red),var(--red2));display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 16px rgba(255,45,45,0.35);animation:badgePulse 3s ease-in-out infinite;}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 16px rgba(255,45,45,0.35)}50%{box-shadow:0 0 28px rgba(255,45,45,0.6)}}
+.brand-name{font-size:14px;font-weight:700;color:#fff;letter-spacing:-0.02em;}
+.back-link{font-size:12px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.back-link:hover{color:#fff;}
+
+/* ── form labels & tags ── */
+.form-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px;}
+.form-tag::before{content:'//';opacity:0.5;}
+.form-h{font-size:1.7rem;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:6px;}
+.form-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5;}
+.form-sub a{color:var(--cyan);text-decoration:none;font-weight:500;}
+.form-sub a:hover{text-decoration:underline;}
+
+/* ── alert banners ── */
+.alert{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 16px;border-radius:10px;
+  font-size:12px;line-height:1.5;margin-bottom:18px;
+  animation:alertIn 0.3s ease;
 }
-    </style>
+@keyframes alertIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.alert-error  {background:rgba(255,45,45,0.08);  border:1px solid rgba(255,45,45,0.4);  color:#FF8A8A;}
+.alert-success{background:rgba(0,200,83,0.08);   border:1px solid rgba(0,200,83,0.35);  color:#00E676;}
+.alert-info   {background:rgba(0,212,255,0.06);  border:1px solid rgba(0,212,255,0.25); color:var(--cyan);}
+.alert-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+
+/* ── oauth ── */
+.oauth-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.oauth-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:9px;background:var(--glass);border:1px solid var(--border);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;transition:all 0.18s;text-decoration:none;}
+.oauth-btn:hover{background:var(--glass2);border-color:var(--border2);transform:translateY(-1px);}
+.divider{display:flex;align-items:center;gap:14px;margin:16px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.divider span{font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;font-family:var(--mono);}
+
+/* ── fields ── */
+.field{margin-bottom:16px;}
+.field-lbl{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.field-lbl a{color:var(--cyan);text-decoration:none;font-size:10px;transition:color 0.2s;}
+.field-lbl a:hover{color:#fff;}
+.input-wrap{position:relative;}
+.input-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;opacity:0.45;}
+input[type=email],input[type=password],input[type=text]{
+  width:100%;padding:12px 14px 12px 42px;
+  background:var(--glass);border:1px solid var(--border);border-radius:10px;
+  color:var(--text);font-family:var(--font);font-size:13px;
+  transition:all 0.2s;outline:none;
+}
+input:hover{border-color:var(--border2);background:var(--glass2);}
+input:focus{border-color:rgba(0,212,255,0.5);background:rgba(0,212,255,0.04);box-shadow:0 0 0 3px rgba(0,212,255,0.08);}
+input::placeholder{color:var(--muted);}
+input.field-has-err{border-color:rgba(255,45,45,0.5)!important;background:rgba(255,45,45,0.03)!important;}
+.field-err-msg{display:flex;align-items:center;gap:4px;font-size:11px;color:#FF8A8A;margin-top:5px;}
+.field-err-msg::before{content:'⚠';font-size:10px;}
+.eye-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:2px;transition:color 0.2s;}
+.eye-btn:hover{color:#fff;}
+
+/* ── checkbox ── */
+.chk-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;cursor:pointer;}
+.chk-row input{display:none;}
+.chk-box{width:16px;height:16px;flex-shrink:0;border:1px solid var(--border2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all 0.15s;}
+.chk-row input:checked ~ .chk-box{background:var(--cyan);border-color:var(--cyan);color:#000;}
+.chk-row span{font-size:12px;color:var(--muted);}
+
+/* ── submit button ── */
+.submit-btn{
+  width:100%;padding:13px;border:none;border-radius:10px;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  color:#fff;font-family:var(--font);font-size:13px;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.22s;position:relative;overflow:hidden;
+  box-shadow:0 0 24px rgba(255,45,45,0.2);margin-top:4px;
+}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 6px 32px rgba(255,45,45,0.45);}
+.submit-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);pointer-events:none;}
+.submit-btn.loading{pointer-events:none;opacity:0.7;}
+.submit-btn .btn-text{transition:opacity 0.2s;}
+.submit-btn.loading .btn-text{opacity:0;}
+.submit-btn .spinner{position:absolute;inset:0;display:none;align-items:center;justify-content:center;}
+.submit-btn.loading .spinner{display:flex;}
+.sp{width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.15);transform:scale(0);animation:rippleAnim 0.5s linear;pointer-events:none;}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+
+@media(max-width:860px){.left-panel{display:none;}.right-panel{width:100%;max-width:480px;margin:0 auto;}}
+@media(max-width:500px){.right-panel{padding:80px 24px 40px;}.oauth-grid{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<header class="header scrolled" id="mainHeader">
-    <div class="container">
-        <div class="logo"><a href="file:///C:/">Aerial Insights</a></div>
-        <nav class="nav">
-            <ul class="nav-list">
-               <li><a href="/">Home</a></li>
-                <li><a href="/#login">Login</a></li>
-                <li><a href="/upload">Upload</a></li>
-            </ul>
-        </nav>
+<canvas id="bg-canvas"></canvas>
+<div class="scan-line"></div>
+<div class="grid-overlay"></div>
+
+<div class="page">
+
+  <!-- ══ LEFT DECORATIVE PANEL ══ -->
+  <div class="left-panel">
+    <div class="corner c-tl"></div><div class="corner c-tr"></div>
+    <div class="corner c-bl"></div><div class="corner c-br"></div>
+    <div class="hud-chip hc1"><div class="hc-v c">99.4%</div><div class="hc-l">Detection Accuracy</div></div>
+    <div class="hud-chip hc2"><div class="hc-v r">Real-time</div><div class="hc-l">Processing Mode</div></div>
+    <div class="lp-inner">
+      <div class="lp-badge">Aerial Intelligence Platform</div>
+      <h2 class="lp-h">Welcome<br>Back to<br><span>AerialView</span></h2>
+      <p class="lp-sub">Your satellite imagery analysis workspace is ready. Log in to access all sectors, algorithms, and saved detection sessions.</p>
+      <div class="lp-stats">
+        <div class="lp-stat"><div class="ls-val"><span>12</span>+</div><div class="ls-lbl">Algorithms</div></div>
+        <div class="lp-stat"><div class="ls-val"><span>6</span></div><div class="ls-lbl">Sectors</div></div>
+        <div class="lp-stat"><div class="ls-val"><span>&lt;1s</span></div><div class="ls-lbl">Speed</div></div>
+      </div>
     </div>
-</header>
+  </div>
 
-<!-- ===================== SCREEN 1: HERO ===================== -->
-<section class="screen-hero" id="hero">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-
-    <div class="hero-content">
-        <div class="hero-badge">
-            <div class="dot"></div>
-            Aerial Image Detection System
-        </div>
-
-        <h1 class="hero-title">
-            See the World<br>from <span class="gradient-text">Above</span>
-        </h1>
-
-        <p class="hero-sub">
-            Real-time aerial image segmentation powered by deep learning — supporting disaster response, traffic monitoring, and smart urban planning.
-        </p>
-
-        <div class="stats-row">
-            <div class="stat-pill"><span class="num">99.2%</span><span class="lbl">Accuracy</span></div>
-            <div class="stat-pill"><span class="num">&lt;50ms</span><span class="lbl">Inference</span></div>
-            <div class="stat-pill"><span class="num">8+</span><span class="lbl">Classes</span></div>
-            <div class="stat-pill"><span class="num">24/7</span><span class="lbl">Uptime</span></div>
-        </div>
-
-        <div class="scroll-cta" onclick="document.getElementById(&#39;auth&#39;).scrollIntoView({behavior:&#39;smooth&#39;})">
-            <span>Sign In to Access</span>
-            <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
-        </div>
+  <!-- ══ RIGHT FORM PANEL ══ -->
+  <div class="right-panel">
+    <div class="form-nav">
+      <a class="form-brand" href="{{ url_for('index') }}">
+        <div class="brand-badge">🛰</div>
+        <span class="brand-name">AerialView Pro</span>
+      </a>
+      <a class="back-link" href="{{ url_for('index') }}">← Home</a>
     </div>
-</section>
 
-<!-- ===================== SCREEN 2: FLIP AUTH ===================== -->
-<section class="screen-auth" id="auth">
+    <div class="form-tag">Secure Access</div>
+    <h1 class="form-h">Log In</h1>
+    <p class="form-sub">Don't have an account? <a href="{{ url_for('register') }}">Sign up free →</a></p>
 
-    <div class="flip-container">
-        <div class="flip-inner flipped" id="flipInner">
+    <!-- ── Flash messages (e.g. "Account created!" from register page) ── -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <span class="alert-icon">
+            {% if category == 'success' %}✓{% elif category == 'error' %}✕{% else %}ℹ{% endif %}
+          </span>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    {% endwith %}
 
-            <!-- ====== FRONT: LOGIN ====== -->
-            <div class="flip-front">
-                <div class="auth-deco login-deco">
-                    <div class="deco-glow"></div>
-                    <div class="deco-logo">
-                        <div class="deco-logo-icon"><i class="fas fa-satellite-dish"></i></div>
-                        <div class="deco-logo-text">Aerial<span>Insights</span></div>
-                    </div>
-                    <h2 class="deco-title">Mission<br>Control <span class="hl">Access</span></h2>
-                    <p class="deco-desc">Sign in to your workspace and start analyzing aerial imagery in real time.</p>
-                    <div class="deco-features">
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Pixel-level semantic segmentation</span></div>
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Disaster &amp; traffic response tools</span></div>
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Live visualization dashboards</span></div>
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Enterprise-grade security</span></div>
-                    </div>
-                    <button class="deco-switch" onclick="flip()">
-                        <i class="fas fa-user-plus"></i> New here? Create an account
-                    </button>
-                </div>
+    {% set errors = errors|default({}) %}
+    {% set old_email = old_email|default('') %}
 
-                <div class="auth-form-wrap">
-                    <div class="auth-form">
-                        <div class="form-header">
-                            <div class="form-tag login-tag"><i class="fas fa-lock"></i> Secure Login</div>
-                            <h2>Welcome Back</h2>
-                            <p>Sign in to your Aerial Insights account.</p>
-                        </div>
+    <!-- ── Wrong credentials banner (set by Flask, shown ONLY on bad login) ── -->
+    {% if errors.credentials %}
+      <div class="alert alert-error">
+        <span class="alert-icon">🔒</span>
+        <span>{{ errors.credentials }}</span>
+      </div>
+    {% endif %}
 
-                        <form onsubmit="handleLogin(event)">
-                            <div class="fg">
-                                <label>Email Address</label>
-                                <div class="iw">
-                                    <i class="fas fa-envelope ico"></i>
-                                    <input type="email" id="lemail" placeholder="you@organization.com" required="">
-                                </div>
-                            </div>
-                            <div class="fg">
-                                <label>Password</label>
-                                <div class="iw">
-                                    <i class="fas fa-lock ico"></i>
-                                    <input type="password" id="lpw" placeholder="Enter your password" required="" oninput="checkLoginStrength(this)">
-                                    <button type="button" class="eye" id="lpw-eye" onclick="toggleEye(&#39;lpw&#39;,&#39;lpw-eye&#39;)"><i class="fas fa-eye"></i></button>
-                                </div>
-                              <div class="strength-bar">
-    <div class="strength-fill" id="loginStrengthFill"></div>
-</div>
+    <!-- OAuth buttons -->
+    <div class="oauth-grid">
+      <a class="oauth-btn" href="#" onclick="return false;">
+        <span style="font-size:16px;">🔵</span><span>Google</span>
+      </a>
+      <a class="oauth-btn" href="#" onclick="return false;">
+        <span style="font-size:16px;">⚫</span><span>GitHub</span>
+      </a>
+    </div>
+    <div class="divider"><span>or continue with email</span></div>
 
-<span class="pw-msg" id="loginPwMsg"></span>
-                            </div>
-                            <div class="form-row">
-                                <label class="chk"><input type="checkbox"> Remember me</label>
-                                <a href="file:///C:/Users/91904/Downloads/login%20(6).html#" class="fgt">Forgot password?</a>
-                            </div>
-                            <button type="submit" class="btn-submit btn-login" id="loginBtn">
-                                <i class="fas fa-sign-in-alt"></i> Sign In
-                            </button>
-                        </form>
+    <!-- ══ LOGIN FORM — POST to Flask, no JS redirect ══ -->
+    <form method="POST" action="{{ url_for('login') }}" novalidate id="loginForm">
 
-                        <div class="divider"><span>or continue with</span></div>
-                        <div class="social-row">
-                            <button class="btn-soc g"><i class="fab fa-google"></i> Google</button>
-                            <button class="btn-soc m"><i class="fab fa-microsoft"></i> Microsoft</button>
-                        </div>
-                        <div class="switch-note">
-                            No account? <a onclick="flip()">Create one →</a>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- /flip-front -->
+      <!-- Email field -->
+      <div class="field">
+        <div class="field-lbl"><span>Email</span></div>
+        <div class="input-wrap">
+          <span class="icon">✉</span>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="operator@aerialview.io"
+            autocomplete="email"
+            value="{{ old_email }}"
+            class="{{ 'field-has-err' if errors.email else '' }}"
+          >
+        </div>
+        {% if errors.email %}
+          <div class="field-err-msg">{{ errors.email }}</div>
+        {% endif %}
+      </div>
 
-            <!-- ====== BACK: REGISTER ====== -->
-            <div class="flip-back">
-                <div class="auth-deco reg-deco">
-                    <div class="deco-glow"></div>
-                    <div class="deco-logo">
-                        <div class="deco-logo-icon"><i class="fas fa-satellite-dish"></i></div>
-                        <div class="deco-logo-text">Aerial<span>Insights</span></div>
-                    </div>
-                    <h2 class="deco-title">Join the<br><span class="hl">Platform</span></h2>
-                    <p class="deco-desc">Create your account and gain access to powerful aerial analysis tools built for professionals.</p>
-                    <div class="deco-features">
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Instant access to all modules</span></div>
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Collaborate with your team</span></div>
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Custom dashboards &amp; reports</span></div>
-                        <div class="deco-feat"><div class="deco-feat-dot"></div><span>Secure &amp; compliant storage</span></div>
-                    </div>
-                    <button class="deco-switch" onclick="flip()">
-                        <i class="fas fa-sign-in-alt"></i> Already have an account? Sign in
-                    </button>
-                </div>
+      <!-- Password field -->
+      <div class="field">
+        <div class="field-lbl">
+          <span>Password</span>
+          <a href="#" onclick="return false;">Forgot password?</a>
+        </div>
+        <div class="input-wrap">
+          <span class="icon">🔑</span>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            class="{{ 'field-has-err' if errors.password else '' }}"
+          >
+          <button type="button" class="eye-btn" id="eye-btn" onclick="togglePwd()">👁</button>
+        </div>
+        {% if errors.password %}
+          <div class="field-err-msg">{{ errors.password }}</div>
+        {% endif %}
+      </div>
 
-                <div class="auth-form-wrap reg-wrap">
-                    <div class="auth-form">
-                        <div class="form-header">
-                            <div class="form-tag reg-tag"><i class="fas fa-user-plus"></i> Create Account</div>
-                            <h2>Get Started</h2>
-                            <p>Set up your Aerial Insights workspace.</p>
-                        </div>
+      <!-- Remember me -->
+      <label class="chk-row">
+        <input type="checkbox" name="remember" id="remember">
+        <div class="chk-box">✓</div>
+        <span>Keep me signed in for 30 days</span>
+      </label>
 
-                        <form onsubmit="handleReg(event)">
-                            <div class="fg-row">
-                                <div class="fg">
-                                    <label>First Name</label>
-                                    <div class="iw">
-                                        <i class="fas fa-user ico"></i>
-                                        <input type="text" placeholder="Jane" required="">
-                                    </div>
-                                </div>
-                                <div class="fg">
-                                    <label>Last Name</label>
-                                    <div class="iw">
-                                        <i class="fas fa-user ico"></i>
-                                        <input type="text" placeholder="Doe" required="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="fg">
-                                <label>Work Email</label>
-                                <div class="iw">
-                                    <i class="fas fa-envelope ico"></i>
-                                    <input type="email" placeholder="you@organization.com" required="">
-                                </div>
-                            </div>
-                            <div class="fg">
-                                <label>Password</label>
-                                <div class="iw">
-                                    <i class="fas fa-lock ico"></i>
-                                    <input type="password" id="rpw" placeholder="Min. 8 characters" required="" oninput="checkStrength(this)">
-                                    <button type="button" class="eye" id="rpw-eye" onclick="toggleEye(&#39;rpw&#39;,&#39;rpw-eye&#39;)"><i class="fas fa-eye-slash"></i></button>
-                                </div>
-                                <div class="strength-bar">
-    <div class="strength-fill" id="strengthFill"></div>
-</div>
+      <!-- Submit -->
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="btn-text">⚡ Launch Session</span>
+        <span class="spinner"><span class="sp"></span></span>
+      </button>
 
-<span class="pw-msg" id="pwMsg"></span>
-                            </div>
-                            <div class="terms">
-                                <input type="checkbox" id="termsCheck" required="">
-                                <span>I agree to the <a href="file:///C:/Users/91904/Downloads/login%20(6).html#">Terms of Service</a> and <a href="file:///C:/Users/91904/Downloads/login%20(6).html#">Privacy Policy</a></span>
-                            </div>
-                            <button type="submit" class="btn-submit btn-reg" id="regBtn">
-                                <i class="fas fa-rocket"></i> Create Account
-                            </button>
-                        </form>
+    </form>
+  </div><!-- end .right-panel -->
 
-                        <div class="divider"><span>or sign up with</span></div>
-                        <div class="social-row">
-                            <button class="btn-soc g"><i class="fab fa-google"></i> Google</button>
-                            <button class="btn-soc m"><i class="fab fa-microsoft"></i> Microsoft</button>
-                        </div>
-                        <div class="switch-note">
-                            Have an account? <a onclick="flip()">← Sign in</a>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- /flip-back -->
-
-        </div><!-- /flip-inner -->
-    </div><!-- /flip-container -->
-
-</section>
+</div><!-- end .page -->
 
 <script>
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
-        document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 50);
-    });
+/* ── particles ── */
+(function(){
+  const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const pts=Array.from({length:55},()=>({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.2+0.2,vx:(Math.random()-0.5)*0.2,vy:(Math.random()-0.5)*0.2,a:Math.random()*0.3+0.04,hue:Math.random()<0.6?185:Math.random()<0.5?10:145}));
+  function draw(){ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},90%,65%,${p.a})`;ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<80){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,212,255,${0.05*(1-d/80)})`;ctx.lineWidth=0.4;ctx.stroke();}}requestAnimationFrame(draw);}
+  draw();
+})();
 
-    let isFlipped = false;
+/* ── ripple effect ── */
+document.addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  const r = document.createElement('span');
+  r.classList.add('ripple');
+  const rc = b.getBoundingClientRect(), sz = Math.max(rc.width, rc.height);
+  r.style.cssText = `width:${sz}px;height:${sz}px;left:${e.clientX-rc.left-sz/2}px;top:${e.clientY-rc.top-sz/2}px;`;
+  b.appendChild(r);
+  r.addEventListener('animationend', () => r.remove());
+});
 
-    function flip() {
-        isFlipped = !isFlipped;
-        document.getElementById('flipInner').classList.toggle('flipped', isFlipped);
-    }
+/* ── password visibility toggle ── */
+function togglePwd() {
+  const inp = document.getElementById('password');
+  const btn = document.getElementById('eye-btn');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
 
-    function toggleEye(inputId, btnId) {
-        const input = document.getElementById(inputId);
-        const btn   = document.getElementById(btnId);
-        const icon  = btn.querySelector('i');
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-    }
+/* ── show loading spinner on submit (server does real validation) ── */
+document.getElementById('loginForm').addEventListener('submit', () => {
+  document.getElementById('submitBtn').classList.add('loading');
+});
 
-    // ===== LOGIN strength checker =====
-    function checkLoginStrength(input) {
-        const val  = input.value;
-        const fill = document.getElementById('loginStrengthFill');
-        const msg  = document.getElementById('loginPwMsg');
-        let score = 0;
-        if (val.length >= 8)           score++;
-        if (/[A-Z]/.test(val))         score++;
-        if (/[0-9]/.test(val))         score++;
-        if (/[^A-Za-z0-9]/.test(val))  score++;
-        const colors = ['#ff6b6b','#ffa94d','#ffe66d','#00b894'];
-        const widths  = ['25%','50%','75%','100%'];
-        fill.style.width      = val.length ? (widths[score-1]  || '10%') : '0%';
-        fill.style.background = val.length ? (colors[score-1] || '#e9ecef') : 'transparent';
-        if (!val.length) { msg.textContent=''; msg.className='pw-msg'; }
-        else if (val.length < 8)       { msg.textContent='At least 8 characters required'; msg.className='pw-msg error'; }
-        else if (!/[A-Z]/.test(val))   { msg.textContent='Add at least one uppercase letter'; msg.className='pw-msg error'; }
-        else if (!/[0-9]/.test(val))   { msg.textContent='Add at least one digit'; msg.className='pw-msg error'; }
-        else                           { msg.textContent='Strong password ✓'; msg.className='pw-msg success'; }
-    }
-
-    // ===== REGISTER strength checker =====
-    function checkStrength(input) {
-    const val  = input.value;
-    const fill = document.getElementById('strengthFill');
-    const msg  = document.getElementById('pwMsg');
-    let score = 0;
-        if (val.length >= 8)           score++;
-        if (/[A-Z]/.test(val))         score++;
-        if (/[0-9]/.test(val))         score++;
-        if (/[^A-Za-z0-9]/.test(val))  score++;
-        const colors = ['#ff6b6b','#ffa94d','#ffe66d','#00b894'];
-        const widths  = ['25%','50%','75%','100%'];
-        fill.style.width      = val.length ? (widths[score-1]  || '10%') : '0%';
-        fill.style.background = val.length ? (colors[score-1] || '#e9ecef') : 'transparent';
-        if (!val.length) { msg.textContent=''; msg.className='pw-msg'; }
-        else if (val.length < 8)       { msg.textContent='At least 8 characters required'; msg.className='pw-msg error'; }
-        else if (!/[A-Z]/.test(val))   { msg.textContent='Add at least one uppercase letter'; msg.className='pw-msg error'; }
-        else if (!/[0-9]/.test(val))   { msg.textContent='Add at least one digit'; msg.className='pw-msg error'; }
-        else                           { msg.textContent='Strong password ✓'; msg.className='pw-msg success'; }
-    }
-
-    function handleLogin(e) {
-        e.preventDefault();
-        const val = document.getElementById('lpw').value;
-        const msg = document.getElementById('loginPwMsg');
-        if (val.length < 8) { msg.textContent='At least 8 characters required'; msg.className='pw-msg error'; document.getElementById('lpw').focus(); return; }
-        if (!/[A-Z]/.test(val)) { msg.textContent='Add at least one uppercase letter'; msg.className='pw-msg error'; document.getElementById('lpw').focus(); return; }
-        if (!/[0-9]/.test(val)) { msg.textContent='Add at least one digit'; msg.className='pw-msg error'; document.getElementById('lpw').focus(); return; }
-        const btn = document.getElementById('loginBtn');
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-        btn.disabled = true;
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-check"></i> Welcome Back!';
-            btn.style.background = 'linear-gradient(135deg,#00b894,#00cec9)';
-        }, 1500);
-    }
-
-    function handleReg(e) {
-        e.preventDefault();
-        const val = document.getElementById('rpw').value;
-        const msg = document.getElementById('pwMsg');
-        if (val.length < 8) { msg.textContent='At least 8 characters required'; msg.className='pw-msg error'; document.getElementById('rpw').focus(); return; }
-        if (!/[A-Z]/.test(val)) { msg.textContent='Add at least one uppercase letter'; msg.className='pw-msg error'; document.getElementById('rpw').focus(); return; }
-        if (!/[0-9]/.test(val)) { msg.textContent='Add at least one digit'; msg.className='pw-msg error'; document.getElementById('rpw').focus(); return; }
-        const btn = document.getElementById('regBtn');
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-        btn.disabled = true;
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-check"></i> Account Created!';
-            btn.style.background = 'linear-gradient(135deg,#00b894,#00cec9)';
-        }, 1500);
-    }
+/* ── client-side real-time field hint (clears red border as user types) ── */
+document.getElementById('email').addEventListener('input', function() {
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value)) this.classList.remove('field-has-err');
+});
+document.getElementById('password').addEventListener('input', function() {
+  if (this.value.trim()) this.classList.remove('field-has-err');
+});
 </script>
-
-
-
-</body></html>
+</body>
+</html>
