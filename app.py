@@ -5,22 +5,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-
-
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-@app.route('/upload')
-def upload():
-    return render_template('upload.html')
-
-
 app = Flask(__name__)
 app.secret_key = 'secretkey'  #secret key for session management
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -115,10 +99,6 @@ def signup():
                 return redirect(url_for('signup'))
 
     return render_template("login.html")
-
-if __name__=='__main__':
-    app.run(debug=True)
-
 
 # Import OS module to work with file paths and directories
 import os
