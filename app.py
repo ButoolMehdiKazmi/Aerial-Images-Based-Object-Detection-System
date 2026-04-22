@@ -125,6 +125,9 @@ def index():
 @app.route('/upload')
 @app.route('/detector')
 def detector():
+    if 'user_id' not in session:
+        flash('Please log in to access the Upload page.', 'error')
+        return redirect(url_for('login'))
     return render_template('upload.html')
 
 # Combined auth route removed in favor of separate login/register handlers
@@ -208,6 +211,9 @@ def logout():
 
 @app.route('/predict', methods=['GET','POST'])
 def predict():
+    if 'user_id' not in session:
+        flash('Please log in to access this page.', 'error')
+        return redirect(url_for('login'))
     file = request.files.get('file')
     if not file: return redirect('/')
     

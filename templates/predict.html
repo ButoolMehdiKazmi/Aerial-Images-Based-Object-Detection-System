@@ -607,22 +607,22 @@
         }
 
         @media (max-width: 768px) {
-            .metrics-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            nav {
-                padding: 0 20px;
-            }
-
-            .nav-auth {
-                display: none;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-        }
+    .metrics-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    nav {
+        padding: 0 20px;
+    }
+    .nav-links {
+        display: none;
+    }
+    .nav-right {
+        width: 100%;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+}
     </style>
 </head>
 
@@ -636,29 +636,28 @@
     <div class="scan-line"></div>
 
     <nav>
-        <a href="/" class="logo">
-            <div class="logo-icon">🚀</div>
-            Aerialview Pro
-        </a>
-        <ul class="nav-links">
-            <li><a href="/">Dashboard</a></li>
-            <li><a href="/detector">New Scan</a></li>
-            <li><a href="#">History</a></li>
-            <li><a href="#">Settings</a></li>
-        </ul>
-        <div class="nav-right">
-            {% if session.user_id %}
-            <div class="nav-auth">
-                <span class="meta-tag">Account Active</span>
-                <a href="/logout" class="btn-auth btn-login">Logout</a>
-            </div>
-            {% else %}
-            <div class="nav-auth">
-                <a href="/login" class="btn-auth btn-login">Sign In</a>
-            </div>
-            {% endif %}
+    <a href="/" class="logo">
+        <div class="logo-icon">🚀</div>
+        Aerialview Pro
+    </a>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('detector') }}">Upload</a></li>
+        <li><a href="{{ url_for('predict') }}" class="active">Prediction</a></li>
+    </ul>
+    <div class="nav-right">
+        {% if session.user_id %}
+        <div class="nav-auth">
+            <span class="meta-tag">Account Active</span>
+            <a href="/logout" class="btn-auth btn-login">Logout</a>
         </div>
-    </nav>
+        {% else %}
+        <div class="nav-auth">
+            <a href="/login" class="btn-auth btn-login">Sign In</a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
 
     <div class="container">
 
@@ -811,12 +810,11 @@
         // JSON Download functionality
         document.getElementById('downloadBtn').addEventListener('click', () => {
             const data = {
-                filename: "{{ filename }}",
-                timestamp: new Date().toISOString(),
-                inference_time: "{{ time }}ms",
-                detections: {{ stats| tojson if stats else '[]'
-        }}
-            };
+    filename: "{{ filename }}",
+    timestamp: new Date().toISOString(),
+    inference_time: "{{ time }}ms",
+    detections: {{ stats|tojson if stats else '[]' }}
+};
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
