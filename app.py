@@ -151,6 +151,8 @@ def contact():
     return render_template('Contact.html')
 
 
+
+
 # Combined auth route removed in favor of separate login/register handlers
 
 @app.route('/register', methods=['GET', 'POST'])

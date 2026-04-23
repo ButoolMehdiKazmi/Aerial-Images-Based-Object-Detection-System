@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0067)file:///C:/Users/91904/Downloads/deepseek_html_20260423_2712f7.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>AerialView Pro — Global Command &amp; Contact</title>
   <link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link href="./contact us_files/css2" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -52,69 +51,89 @@
       pointer-events: none;
     }
 
-    /* Navigation */
+    /* NAVIGATION - Updated from about page */
     .nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      height: 70px;
+      height: 62px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 40px;
-      transition: all 0.3s ease;
+      transition: background 0.4s, border-color 0.4s;
+      max-width: 1400px;
+      margin: 0 auto;
     }
+
     .nav.scrolled {
       background: rgba(6, 8, 16, 0.92);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(20px);
     }
+
     .nav-brand {
       display: flex;
       align-items: center;
       gap: 12px;
       text-decoration: none;
     }
+
     .nav-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       background: linear-gradient(135deg, var(--red), var(--red2));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 0 20px rgba(255, 45, 45, 0.3);
+      font-size: 16px;
+      box-shadow: 0 0 20px rgba(255, 45, 45, 0.4);
+      animation: badgePulse 3s ease-in-out infinite;
     }
+
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 45, 45, 0.4); }
+      50% { box-shadow: 0 0 35px rgba(255, 45, 45, 0.7); }
+    }
+
     .nav-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: #fff;
       letter-spacing: -0.02em;
     }
+
     .nav-links {
       display: flex;
-      gap: 36px;
+      gap: 32px;
       list-style: none;
     }
+
     .nav-links a {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--muted);
       text-decoration: none;
+      letter-spacing: 0.02em;
       transition: color 0.2s;
     }
-    .nav-links a:hover, .nav-links a.active {
+
+    .nav-links a:hover,
+    .nav-links a.active {
       color: #fff;
     }
+
     .nav-right {
       display: flex;
-      gap: 12px;
+      align-items: center;
+      gap: 10px;
     }
+
     .nav-login {
-      padding: 8px 20px;
+      padding: 8px 18px;
       border-radius: 8px;
       background: transparent;
       border: 1px solid var(--border2);
@@ -124,24 +143,90 @@
       text-decoration: none;
       transition: all 0.2s;
     }
+
     .nav-login:hover {
       background: var(--glass2);
       border-color: rgba(0, 212, 255, 0.4);
+      color: #fff;
     }
+
     .nav-cta {
-      padding: 8px 22px;
+      padding: 8px 20px;
       border-radius: 8px;
       background: linear-gradient(135deg, var(--red), var(--red2));
       color: #fff;
       font-size: 13px;
       font-weight: 600;
       text-decoration: none;
-      box-shadow: 0 0 15px rgba(255, 45, 45, 0.3);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 45, 45, 0.3);
       transition: all 0.2s;
     }
+
     .nav-cta:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 20px rgba(255, 45, 45, 0.5);
+      box-shadow: 0 4px 28px rgba(255, 45, 45, 0.5);
+    }
+
+    /* FOOTER - Updated from about page */
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+      .nav {
+        padding: 0 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-login {
+        display: none;
+      }
+      footer {
+        padding: 28px 20px;
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+      }
     }
 
     /* Hero Section */
@@ -427,63 +512,14 @@
       line-height: 1.5;
     }
 
-    /* Footer */
-    .footer {
-      position: relative;
-      z-index: 1;
-      padding: 30px 40px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-      background: transparent;
-    }
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .footer-badge {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--red), var(--red2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-    .footer-copy {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .footer-links {
-      display: flex;
-      gap: 28px;
-    }
-    .footer-links a {
-      font-size: 12px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover {
-      color: #fff;
-    }
-
     @media (max-width: 900px) {
       .contact-grid { grid-template-columns: 1fr; }
       .hub-grid { grid-template-columns: 1fr; }
       .faq-grid { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
       .contact-wrapper { padding: 0 20px 60px; }
-      .nav { padding: 0 20px; }
     }
     @media (max-width: 600px) {
-      .nav-login { display: none; }
-      .footer { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
     }
     .reveal {
       opacity: 0;
@@ -509,25 +545,27 @@
 </head>
 <body>
 
-<canvas id="bg-canvas" width="1536" height="730"></canvas>
+<canvas id="bg-canvas"></canvas>
 
+<!-- NAV - Updated from about page -->
 <nav class="nav" id="nav">
-  <a class="nav-brand" href="file:///C:/">
+  <a class="nav-brand" href="{{ url_for('index') }}">
     <div class="nav-badge">🛰</div>
     <span class="nav-title">AerialView Pro</span>
   </a>
   <ul class="nav-links">
     <li><a href="{{ url_for('index') }}">Home</a></li>
-  <li><a href="{{ url_for('detector') }}">Upload</a></li>
-  <li><a href="{{ url_for('about') }}">About</a></li>
-  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-  <li><a href="{{ url_for('history') }}">History</a></li>
-  <li><a href="{{ url_for('support') }}">Support</a></li>
-  <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-
+    <li><a href="{{ url_for('detector') }}">Upload</a></li>
+    <li><a href="{{ url_for('about') }}">About</a></li>
+    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+    <li><a href="{{ url_for('history') }}">History</a></li>
+    <li><a href="{{ url_for('support') }}">Support</a></li>
+    <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+  </ul>
   <div class="nav-right">
     <a class="nav-login" href="{{ url_for('login') }}">Log In</a>
-      <a class="nav-cta" href="{{ url_for('register') }}">Sign Up Free</a>
+    <a class="nav-cta" href="{{ url_for('register') }}">Sign Up Free</a>
+  </div>
 </nav>
 
 <section class="contact-hero">
@@ -541,7 +579,7 @@
 <div class="contact-wrapper">
   <div class="contact-grid">
     <!-- Left: contact channels -->
-    <div class="glass-card reveal in">
+    <div class="glass-card reveal">
       <div class="card-header">
         <div class="card-icon">📡</div>
         <h3>Command Channels</h3>
@@ -559,7 +597,7 @@
     </div>
 
     <!-- Right: contact form with database save simulation -->
-    <div class="glass-card reveal delay1 in">
+    <div class="glass-card reveal delay1">
       <div class="card-header">
         <div class="card-icon">✍️</div>
         <h3>Secure Dispatch</h3>
@@ -594,7 +632,7 @@
   </div>
 
   <!-- Intelligence Hubs (Worldwide) -->
-  <div class="reveal delay2 in">
+  <div class="reveal delay2">
     <div class="section-tag-center">
       <div class="section-tag">Strategic Aerial Hubs</div>
     </div>
@@ -606,7 +644,7 @@
   </div>
 
   <!-- Frequently Asked Questions -->
-  <div class="reveal delay3 in">
+  <div class="reveal delay3">
     <div class="section-tag-center">
       <div class="section-tag">Intelligence Briefing</div>
     </div>
@@ -619,17 +657,18 @@
   </div>
 </div>
 
-<footer class="footer">
+<!-- FOOTER - Updated from about page -->
+<footer>
   <div class="footer-brand">
-    <div class="footer-badge">🛰</div>
-    <span style="font-size: 13px; font-weight: 600;">AerialView Pro</span>
+    <div class="nav-badge" style="width:28px;height:28px;font-size:13px;">🛰</div>
+    <span style="font-size:13px;font-weight:600;color:#fff;">AerialView Pro</span>
   </div>
-  <span class="footer-copy">© 2025 Aerial Intelligence · Multi-Sector Command</span>
+  <span class="footer-copy">© 2024 AerialView Detector Pro · Multi-Sector Edition</span>
   <div class="footer-links">
-    <a href="file:///C:/Users/91904/Downloads/deepseek_html_20260423_2712f7.html#">API Status</a>
-    <a href="file:///C:/Users/91904/Downloads/deepseek_html_20260423_2712f7.html#">Documentation</a>
-    <a href="file:///C:/Users/91904/Downloads/%7B%7B%20url_for(&#39;login&#39;)%20%7D%7D">Secure Portal</a>
-    <a href="file:///C:/Users/91904/Downloads/deepseek_html_20260423_2712f7.html#">Privacy</a>
+    <a href="#">Documentation</a>
+    <a href="#">API</a>
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('register') }}">Register</a>
   </div>
 </footer>
 
@@ -695,7 +734,7 @@
     // Nav scroll effect
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 40);
+      nav.classList.toggle('scrolled', window.scrollY > 60);
     });
     
     // Reveal animations

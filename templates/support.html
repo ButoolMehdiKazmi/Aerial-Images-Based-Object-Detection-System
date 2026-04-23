@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- saved from url=(0067)file:///C:/Users/91904/Downloads/deepseek_html_20260423_d6245d.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>AerialView Pro | Mission Support Center</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com/">
-    <link href="./support_files/css2" rel="stylesheet">
-    <link rel="stylesheet" href="./support_files/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -55,74 +55,89 @@
             pointer-events: none;
         }
 
-        /* Navigation */
+        /* NAVIGATION - Updated from about page */
         .nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            height: 70px;
+            height: 62px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 40px;
-            transition: all 0.3s ease;
+            transition: background 0.4s, border-color 0.4s;
+            max-width: 1400px;
+            margin: 0 auto;
         }
+
         .nav.scrolled {
             background: rgba(6, 8, 16, 0.92);
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(20px);
         }
+
         .nav-brand {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
         }
+
         .nav-badge {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             background: linear-gradient(135deg, var(--red), var(--red2));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            box-shadow: 0 0 20px rgba(255, 45, 45, 0.3);
+            font-size: 16px;
+            box-shadow: 0 0 20px rgba(255, 45, 45, 0.4);
             animation: badgePulse 3s ease-in-out infinite;
         }
+
         @keyframes badgePulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 45, 45, 0.3); }
-            50% { box-shadow: 0 0 35px rgba(255, 45, 45, 0.6); }
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 45, 45, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(255, 45, 45, 0.7); }
         }
+
         .nav-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #fff;
             letter-spacing: -0.02em;
         }
+
         .nav-links {
             display: flex;
-            gap: 36px;
+            gap: 32px;
             list-style: none;
         }
+
         .nav-links a {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--muted);
             text-decoration: none;
+            letter-spacing: 0.02em;
             transition: color 0.2s;
         }
-        .nav-links a:hover, .nav-links a.active {
+
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #fff;
         }
+
         .nav-right {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: 10px;
         }
+
         .nav-login {
-            padding: 8px 20px;
+            padding: 8px 18px;
             border-radius: 8px;
             background: transparent;
             border: 1px solid var(--border2);
@@ -132,24 +147,90 @@
             text-decoration: none;
             transition: all 0.2s;
         }
+
         .nav-login:hover {
             background: var(--glass2);
             border-color: rgba(0, 212, 255, 0.4);
+            color: #fff;
         }
+
         .nav-cta {
-            padding: 8px 22px;
+            padding: 8px 20px;
             border-radius: 8px;
             background: linear-gradient(135deg, var(--red), var(--red2));
             color: #fff;
             font-size: 13px;
             font-weight: 600;
             text-decoration: none;
-            box-shadow: 0 0 15px rgba(255, 45, 45, 0.3);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 45, 45, 0.3);
             transition: all 0.2s;
         }
+
         .nav-cta:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(255, 45, 45, 0.5);
+            box-shadow: 0 4px 28px rgba(255, 45, 45, 0.5);
+        }
+
+        /* FOOTER - Updated from about page */
+        footer {
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+            .nav {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nav-login {
+                display: none;
+            }
+            footer {
+                padding: 28px 20px;
+                flex-direction: column;
+                gap: 14px;
+                text-align: center;
+            }
         }
 
         /* Main Container */
@@ -625,25 +706,10 @@
             30% { transform: translateY(-6px); opacity: 1; }
         }
 
-        /* Footer */
-        footer {
-            position: relative;
-            z-index: 1;
-            padding: 30px 40px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            background: transparent;
-        }
-
         @media (max-width: 1000px) {
             .quick-support { grid-template-columns: repeat(2, 1fr); }
             .kb-grid { grid-template-columns: 1fr; }
             .contact-channels { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
             .support-container { padding: 90px 20px 40px; }
             .support-hero h1 { font-size: 32px; }
             .chatbot-container { width: 320px; right: 20px; }
@@ -662,61 +728,61 @@
 </head>
 <body>
 
-<canvas id="bg-canvas" width="1536" height="730"></canvas>
+<canvas id="bg-canvas"></canvas>
 
+<!-- NAV - Updated from about page -->
 <nav class="nav" id="nav">
-    <a class="nav-brand" href="file:///C:/Users/91904/Downloads/%7B%7B%20url_for(&#39;index&#39;)%20%7D%7D">
+    <a class="nav-brand" href="{{ url_for('index') }}">
         <div class="nav-badge">🛰</div>
         <span class="nav-title">AerialView Pro</span>
     </a>
-     <ul class="nav-links">
-  <li><a href="{{ url_for('index') }}">Home</a></li>
-  <li><a href="{{ url_for('detector') }}">Upload</a></li>
-  <li><a href="{{ url_for('about') }}">About</a></li>
-  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-  <li><a href="{{ url_for('history') }}">History</a></li>
-  <li><a href="{{ url_for('support') }}">Support</a></li>
-  <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-
-</ul>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('detector') }}">Upload</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('history') }}">History</a></li>
+        <li><a href="{{ url_for('support') }}" class="active">Support</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+    </ul>
     <div class="nav-right">
-      <a class="nav-login" href="{{ url_for('login') }}">Log In</a>
-      <a class="nav-cta" href="{{ url_for('register') }}">Sign Up Free</a>
+        <a class="nav-login" href="{{ url_for('login') }}">Log In</a>
+        <a class="nav-cta" href="{{ url_for('register') }}">Sign Up Free</a>
     </div>
 </nav>
 
 <div class="support-container">
     <!-- Hero Section -->
-    <div class="support-hero reveal in">
+    <div class="support-hero reveal">
         <div class="hero-tag">MISSION SUPPORT CENTER</div>
         <h1>We're Here to Help</h1>
         <p>24/7 technical assistance, knowledge base, and AI-powered chatbot for instant answers</p>
         <div class="status-badge">
             <div class="pulse-dot"></div>
-            <span>ALL SYSTEMS OPERATIONAL · RESPONSE TIME &lt; 2 HOURS</span>
+            <span>ALL SYSTEMS OPERATIONAL · RESPONSE TIME < 2 HOURS</span>
         </div>
     </div>
 
     <!-- Search Bar -->
-    <div class="search-section reveal delay1 in">
+    <div class="search-section reveal delay1">
         <i class="fas fa-search"></i>
         <input type="text" id="searchInput" placeholder="Search knowledge base articles...">
         <button class="search-btn" onclick="searchKnowledgeBase()">Search</button>
     </div>
 
     <!-- Quick Support Cards -->
-    <div class="quick-support reveal delay2 in">
-        <div class="support-card" onclick="document.getElementById(&#39;faqSection&#39;).scrollIntoView({behavior:&#39;smooth&#39;})">
+    <div class="quick-support reveal delay2">
+        <div class="support-card" onclick="document.getElementById('faqSection').scrollIntoView({behavior:'smooth'})">
             <i class="fas fa-question-circle"></i>
             <h3>FAQs</h3>
-            <p>Common questions &amp; answers</p>
+            <p>Common questions & answers</p>
         </div>
         <div class="support-card" onclick="openChatbot()">
             <i class="fas fa-robot"></i>
             <h3>AI Assistant</h3>
             <p>Chat with our support bot</p>
         </div>
-        <div class="support-card" onclick="window.location.href=&#39;mailto:support@aerialview.ai&#39;">
+        <div class="support-card" onclick="window.location.href='mailto:support@aerialview.ai'">
             <i class="fas fa-envelope"></i>
             <h3>Email Us</h3>
             <p>support@aerialview.ai</p>
@@ -729,107 +795,27 @@
     </div>
 
     <!-- Knowledge Base Section -->
-    <div class="kb-section reveal delay3 in">
+    <div class="kb-section reveal delay3">
         <div class="card-header">
             <i class="fas fa-book-open"></i>
             <h2>Knowledge Base</h2>
         </div>
         <div class="kb-grid" id="kbGrid">
-            <div class="kb-article" onclick="openArticle(1)">
-                <i class="fas fa-rocket"></i>
-                <h4>Getting Started Guide</h4>
-                <p>Learn how to upload, analyze, and interpret aerial imagery</p>
-                <span class="read-more">Read More →</span>
-            </div>
-        
-            <div class="kb-article" onclick="openArticle(2)">
-                <i class="fas fa-code"></i>
-                <h4>API Documentation</h4>
-                <p>Complete reference for integrating AerialView Pro</p>
-                <span class="read-more">Read More →</span>
-            </div>
-        
-            <div class="kb-article" onclick="openArticle(3)">
-                <i class="fas fa-chart-line"></i>
-                <h4>Understanding Detection Metrics</h4>
-                <p>Confidence scores, accuracy, and reporting explained</p>
-                <span class="read-more">Read More →</span>
-            </div>
-        
-            <div class="kb-article" onclick="openArticle(4)">
-                <i class="fas fa-shield-alt"></i>
-                <h4>Security &amp; Compliance</h4>
-                <p>Data privacy, encryption standards, and certifications</p>
-                <span class="read-more">Read More →</span>
-            </div>
-        
-            <div class="kb-article" onclick="openArticle(5)">
-                <i class="fas fa-cogs"></i>
-                <h4>Custom Model Training</h4>
-                <p>Train custom detection models for specific sectors</p>
-                <span class="read-more">Read More →</span>
-            </div>
-        
-            <div class="kb-article" onclick="openArticle(6)">
-                <i class="fas fa-video"></i>
-                <h4>Video Tutorials</h4>
-                <p>Step-by-step video guides for all features</p>
-                <span class="read-more">Read More →</span>
-            </div>
+            <!-- Articles will be populated via JS -->
         </div>
     </div>
 
     <!-- FAQ Section -->
-    <div class="kb-section reveal delay4 in" id="faqSection">
+    <div class="kb-section reveal delay4" id="faqSection">
         <div class="card-header">
             <i class="fas fa-question-circle"></i>
             <h2>Frequently Asked Questions</h2>
         </div>
-        <div id="faqContainer">
-            <div class="faq-item" style="border-bottom:1px solid var(--border);padding:16px 0;">
-                <div class="faq-question" style="display:flex;justify-content:space-between;cursor:pointer;font-weight:600;" onclick="toggleFaq(this)">
-                    <span>How accurate is the aerial detection algorithm?</span>
-                    <i class="fas fa-chevron-down" style="transition:0.2s;"></i>
-                </div>
-                <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s;color:var(--muted);font-size:13px;line-height:1.6;">Our AI models achieve 94-98% accuracy across all sectors. The system uses ensemble learning with 12+ specialized algorithms optimized for different terrains and lighting conditions.</div>
-            </div>
-        
-            <div class="faq-item" style="border-bottom:1px solid var(--border);padding:16px 0;">
-                <div class="faq-question" style="display:flex;justify-content:space-between;cursor:pointer;font-weight:600;" onclick="toggleFaq(this)">
-                    <span>What image formats are supported?</span>
-                    <i class="fas fa-chevron-down" style="transition:0.2s;"></i>
-                </div>
-                <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s;color:var(--muted);font-size:13px;line-height:1.6;">We support JPEG, PNG, TIFF, GeoTIFF, and RAW formats. Maximum file size is 500MB per image. Batch processing available for enterprise plans.</div>
-            </div>
-        
-            <div class="faq-item" style="border-bottom:1px solid var(--border);padding:16px 0;">
-                <div class="faq-question" style="display:flex;justify-content:space-between;cursor:pointer;font-weight:600;" onclick="toggleFaq(this)">
-                    <span>How long does analysis take?</span>
-                    <i class="fas fa-chevron-down" style="transition:0.2s;"></i>
-                </div>
-                <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s;color:var(--muted);font-size:13px;line-height:1.6;">Standard analysis completes in under 1 second per image. Large-scale batch processing can handle thousands of images per minute on our GPU clusters.</div>
-            </div>
-        
-            <div class="faq-item" style="border-bottom:1px solid var(--border);padding:16px 0;">
-                <div class="faq-question" style="display:flex;justify-content:space-between;cursor:pointer;font-weight:600;" onclick="toggleFaq(this)">
-                    <span>Is my data secure?</span>
-                    <i class="fas fa-chevron-down" style="transition:0.2s;"></i>
-                </div>
-                <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s;color:var(--muted);font-size:13px;line-height:1.6;">Yes. All data is encrypted at rest and in transit. We are SOC 2 Type II compliant and offer on-premise deployment for sensitive missions.</div>
-            </div>
-        
-            <div class="faq-item" style="border-bottom:1px solid var(--border);padding:16px 0;">
-                <div class="faq-question" style="display:flex;justify-content:space-between;cursor:pointer;font-weight:600;" onclick="toggleFaq(this)">
-                    <span>Can I integrate with my existing workflow?</span>
-                    <i class="fas fa-chevron-down" style="transition:0.2s;"></i>
-                </div>
-                <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s;color:var(--muted);font-size:13px;line-height:1.6;">Absolutely. We offer REST API, webhooks, and SDKs for Python, JavaScript, and Go. Zapier integration available for no-code automation.</div>
-            </div>
-        </div>
+        <div id="faqContainer"></div>
     </div>
 
     <!-- Contact Channels -->
-    <div class="contact-channels reveal delay5 in">
+    <div class="contact-channels reveal delay5">
         <div class="channel">
             <i class="fas fa-phone-alt"></i>
             <h4>Emergency Hotline</h4>
@@ -845,7 +831,7 @@
         <div class="channel">
             <i class="fab fa-github"></i>
             <h4>GitHub Support</h4>
-            <p>Open issues &amp; feature requests</p>
+            <p>Open issues & feature requests</p>
             <p style="font-size: 10px;">github.com/aerialview</p>
         </div>
     </div>
@@ -854,16 +840,16 @@
 <!-- Ticket Modal -->
 <div id="ticketModal" class="modal">
     <div class="modal-content">
-        <span class="modal-close" onclick="closeModal(&#39;ticketModal&#39;)">×</span>
+        <span class="modal-close" onclick="closeModal('ticketModal')">&times;</span>
         <h2>Submit Support Ticket</h2>
         <form id="ticketForm">
             <div class="form-group" style="margin-bottom: 15px;">
                 <label>Full Name</label>
-                <input type="text" id="ticketName" required="" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:white;">
+                <input type="text" id="ticketName" required style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:white;">
             </div>
             <div class="form-group" style="margin-bottom: 15px;">
                 <label>Email</label>
-                <input type="email" id="ticketEmail" required="" style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:white;">
+                <input type="email" id="ticketEmail" required style="width:100%;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:white;">
             </div>
             <div class="form-group" style="margin-bottom: 15px;">
                 <label>Issue Type</label>
@@ -885,7 +871,7 @@
     <div class="chatbot-toggle" onclick="toggleChatbot()">
         <i class="fas fa-comment-dots"></i>
     </div>
-    <div class="chatbot-container" id="chatbotContainer" style="display: none;">
+    <div class="chatbot-container" id="chatbotContainer">
         <div class="chatbot-header">
             <h3><i class="fas fa-robot"></i> AerialView AI Assistant</h3>
             <i class="fas fa-times" onclick="toggleChatbot()"></i>
@@ -894,22 +880,24 @@
             <div class="message bot-message">👋 Hello! I'm your AerialView AI assistant. Ask me anything about aerial detection, algorithms, sectors, or how to use the platform!</div>
         </div>
         <div class="chatbot-input">
-            <input type="text" id="chatInput" placeholder="Type your question..." onkeypress="if(event.key===&#39;Enter&#39;) sendMessage()">
+            <input type="text" id="chatInput" placeholder="Type your question..." onkeypress="if(event.key==='Enter') sendMessage()">
             <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
+<!-- FOOTER - Updated from about page -->
 <footer>
-    <div style="display: flex; align-items: center; gap: 12px;">
-        <div style="width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--red2));display:flex;align-items:center;justify-content:center;">🛰</div>
-        <span style="font-size:13px;font-weight:600;">AerialView Pro</span>
+    <div class="footer-brand">
+        <div class="nav-badge" style="width:28px;height:28px;font-size:13px;">🛰</div>
+        <span style="font-size:13px;font-weight:600;color:#fff;">AerialView Pro</span>
     </div>
-    <span style="font-size:12px;color:var(--muted);">© 2025 AerialView Pro · Mission Support Center</span>
-    <div style="display:flex;gap:24px;">
-        <a href="file:///C:/Users/91904/Downloads/deepseek_html_20260423_d6245d.html#" style="color:var(--muted);text-decoration:none;font-size:12px;">Documentation</a>
-        <a href="file:///C:/Users/91904/Downloads/deepseek_html_20260423_d6245d.html#" style="color:var(--muted);text-decoration:none;font-size:12px;">API Status</a>
-        <a href="file:///C:/Users/91904/Downloads/deepseek_html_20260423_d6245d.html#" style="color:var(--muted);text-decoration:none;font-size:12px;">Security</a>
+    <span class="footer-copy">© 2024 AerialView Detector Pro · Multi-Sector Edition</span>
+    <div class="footer-links">
+        <a href="#">Documentation</a>
+        <a href="#">API</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
     </div>
 </footer>
 
@@ -1119,4 +1107,5 @@
     window.searchKnowledgeBase = searchKnowledgeBase;
 </script>
 
-</body></html>
+</body>
+</html>
