@@ -640,11 +640,17 @@
         <div class="logo-icon">🚀</div>
         Aerialview Pro
     </a>
-    <ul class="nav-links">
-        <li><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="{{ url_for('detector') }}">Upload</a></li>
-        <li><a href="{{ url_for('predict') }}" class="active">Prediction</a></li>
-    </ul>
+     <ul class="nav-links">
+  <li><a href="{{ url_for('index') }}">Home</a></li>
+  <li><a href="{{ url_for('detector') }}">Upload</a></li>
+  <li><a href="{{ url_for('about') }}">About</a></li>
+  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+  <li><a href="{{ url_for('history') }}">History</a></li>
+  <li><a href="{{ url_for('support') }}">Support</a></li>
+  <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+
+</ul>
+    
     <div class="nav-right">
         {% if session.user_id %}
         <div class="nav-auth">

@@ -122,6 +122,10 @@ transform = transforms.Compose([
 def index():
     return render_template('index.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/upload')
 @app.route('/detector')
 def detector():
@@ -129,6 +133,23 @@ def detector():
         flash('Please log in to access the Upload page.', 'error')
         return redirect(url_for('login'))
     return render_template('upload.html')
+
+@app.route('/history')
+def history():
+    return render_template('history.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('Dashboard.html')
+
+@app.route('/support')
+def support():
+    return render_template('support.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('Contact.html')
+
 
 # Combined auth route removed in favor of separate login/register handlers
 

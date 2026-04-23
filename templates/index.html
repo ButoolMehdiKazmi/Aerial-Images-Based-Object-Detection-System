@@ -543,8 +543,9 @@
   z-index: 1;
   padding: 120px 40px;
   background: var(--bg2);
-  overflow: visible;
-  isolation: auto;
+
+  overflow: visible;        /* allow pop-out */
+  isolation: isolate;       /* create independent stacking context */
 }
 
    .feat-grid {
@@ -552,6 +553,9 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-top: 60px;
+
+  position: relative;   /* IMPORTANT */
+  z-index: 1;
   overflow: visible;
 }
 
@@ -560,20 +564,27 @@
   border-radius: 14px;
   background: var(--glass);
   border: 1px solid var(--border);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
-  cursor: pointer;
+
   position: relative;
   z-index: 1;
-  will-change: transform;
+
+  transition: all 0.35s ease;
+  transform-origin: center;
 }
 
 .feat-card:hover {
-  background: rgba(0, 212, 255, 0.08);
-  border-color: rgba(0, 212, 255, 0.6);
-  transform: translateY(-20px) scale(1.05);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 212, 255, 0.3);
-  z-index: 100;
+  transform: translateY(-25px) scale(1.08);
+
+  z-index: 9999; /* force on top */
+
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.8),
+    0 0 50px rgba(0, 212, 255, 0.4);
+
+  border-color: rgba(0, 212, 255, 0.8);
+  background: rgba(0, 212, 255, 0.1);
 }
+
 
 .feat-card:active,
 .feat-card.clicked {
@@ -967,9 +978,15 @@
       <span class="nav-title">AerialView Pro</span>
     </a>
     <ul class="nav-links">
+   <ul class="nav-links">
   <li><a href="{{ url_for('index') }}">Home</a></li>
   <li><a href="{{ url_for('detector') }}">Upload</a></li>
-  <li><a href="{{ url_for('predict') }}">Prediction</a></li>
+  <li><a href="{{ url_for('about') }}">About</a></li>
+  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+  <li><a href="{{ url_for('history') }}">History</a></li>
+  <li><a href="{{ url_for('support') }}">Support</a></li>
+  <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+
 </ul>
     <div class="nav-right">
       <a class="nav-login" href="{{ url_for('login') }}">Log In</a>
@@ -1084,7 +1101,7 @@
 
   <!-- FEATURES — Capabilities baad mein -->
   <section class="features" id="features">
-    <div style="max-width:1600px;margin:0 auto;overflow:visible;position:relative;z-index:2;">
+    <div style="max-width:1600px;margin:0 auto;position:relative;">
       <div class="reveal" style="text-align:center;">
         <div class="section-tag" style="justify-content:center;">Capabilities</div>
         <h2 class="section-h2" style="text-align:center;">Built for Intelligence<br>at Every Altitude</h2>

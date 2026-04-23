@@ -971,7 +971,6 @@
     }
   </style>
 </head>
-
 <body>
 
   <canvas id="bg-canvas"></canvas>
@@ -988,8 +987,13 @@
     </a>
     <ul class="nav-links">
   <li><a href="{{ url_for('index') }}">Home</a></li>
-  <li><a href="{{ url_for('detector') }}" class="active">Upload</a></li>
-  <li><a href="{{ url_for('predict') }}">Prediction</a></li>
+  <li><a href="{{ url_for('detector') }}">Upload</a></li>
+  <li><a href="{{ url_for('about') }}">About</a></li>
+  <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+  <li><a href="{{ url_for('history') }}">History</a></li>
+  <li><a href="{{ url_for('support') }}">Support</a></li>
+  <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+
 </ul>
     <div class="nav-right">
       <a class="nav-login" href="{{ url_for('login') }}">Log In</a>
