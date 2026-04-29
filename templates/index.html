@@ -77,7 +77,7 @@
       pointer-events: none;
     }
 
-    /* NAV */
+    /* NAVIGATION - Updated from about page */
     .nav {
       position: fixed;
       top: 0;
@@ -90,6 +90,8 @@
       justify-content: space-between;
       padding: 0 40px;
       transition: background 0.4s, border-color 0.4s;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
     .nav.scrolled {
@@ -152,7 +154,8 @@
       transition: color 0.2s;
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover,
+    .nav-links a.active {
       color: #fff;
     }
 
@@ -197,6 +200,68 @@
     .nav-cta:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 28px rgba(255, 45, 45, 0.5);
+    }
+
+    /* FOOTER - Updated from about page */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav {
+        padding: 0 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-login {
+        display: none;
+      }
+
+      footer {
+        padding: 28px 20px;
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+      }
     }
 
     /* HERO */
@@ -387,8 +452,10 @@
     .scroll-hint {
       position: absolute;
       bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: fit-content;
       z-index: 5;
       display: flex;
       flex-direction: column;
@@ -540,8 +607,10 @@
     .features {
       position: relative;
       z-index: 1;
-      padding: 100px 40px;
+      padding: 120px 40px;
       background: var(--bg2);
+      overflow: visible;
+      isolation: isolate;
     }
 
     .feat-grid {
@@ -549,6 +618,9 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-top: 60px;
+      position: relative;
+      z-index: 1;
+      overflow: visible;
     }
 
     .feat-card {
@@ -556,14 +628,27 @@
       border-radius: 14px;
       background: var(--glass);
       border: 1px solid var(--border);
-      transition: all 0.3s;
+      position: relative;
+      z-index: 1;
+      transition: all 0.35s ease;
+      transform-origin: center;
     }
 
     .feat-card:hover {
-      background: var(--glass2);
-      border-color: rgba(0, 212, 255, 0.2);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      transform: translateY(-25px) scale(1.08);
+      z-index: 9999;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 212, 255, 0.4);
+      border-color: rgba(0, 212, 255, 0.8);
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    .feat-card:active,
+    .feat-card.clicked {
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.9);
+      transform: translateY(-14px) scale(1.04);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 50px rgba(0, 212, 255, 0.4);
+      z-index: 100;
     }
 
     .feat-icon {
@@ -803,44 +888,6 @@
       line-height: 1.7;
     }
 
-    /* FOOTER */
-    footer {
-      position: relative;
-      z-index: 1;
-      padding: 40px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .footer-copy {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 24px;
-    }
-
-    .footer-links a {
-      font-size: 12px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: #fff;
-    }
-
     /* REVEAL */
     .reveal {
       opacity: 0;
@@ -942,16 +989,20 @@
 
   <canvas id="bg-canvas"></canvas>
 
-  <!-- NAV -->
+  <!-- NAV - Updated from about page -->
   <nav class="nav" id="nav">
-    <a class="nav-brand" href="/">
+    <a class="nav-brand" href="{{ url_for('index') }}">
       <div class="nav-badge">🛰</div>
       <span class="nav-title">AerialView Pro</span>
     </a>
     <ul class="nav-links">
-      <li><a href="{{ url_for('detector') }}">Detector</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#specs">Technology</a></li>
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('detector') }}">Upload</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+      <li><a href="{{ url_for('history') }}">History</a></li>
+      <li><a href="{{ url_for('support') }}">Support</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
     </ul>
     <div class="nav-right">
       <a class="nav-login" href="{{ url_for('login') }}">Log In</a>
@@ -970,7 +1021,7 @@
       <p class="hero-sub">Multi-sector aerial image analysis at pixel resolution. From disaster relief to precision
         agriculture — detect, classify, and act in real time.</p>
       <div class="hero-btns">
-        <a class="btn-primary" href="{{ url_for('detector') }}">Start Detecting</a>
+        <a class="btn-primary" href="{{ url_for('detector') }}">Get Started</a>
         <a class="btn-ghost" href="#features">Explore Features</a>
       </div>
     </div>
@@ -1004,7 +1055,7 @@
       <div class="specs-inner">
         <div class="spec-img-col reveal">
           <div class="spec-img">
-            <img src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=900&q=80" alt="Aerial analysis">
+           <img src="{{ url_for('static', filename='home.jpg') }}" alt="Aerial analysis">
             <div class="spec-img-overlay"></div>
           </div>
           <div class="float-card fc1">
@@ -1066,7 +1117,7 @@
 
   <!-- FEATURES — Capabilities baad mein -->
   <section class="features" id="features">
-    <div style="max-width:1600px;margin:0 auto;">
+    <div style="max-width:1600px;margin:0 auto;position:relative;">
       <div class="reveal" style="text-align:center;">
         <div class="section-tag" style="justify-content:center;">Capabilities</div>
         <h2 class="section-h2" style="text-align:center;">Built for Intelligence<br>at Every Altitude</h2>
@@ -1124,7 +1175,7 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- FOOTER - Updated from about page -->
   <footer>
     <div class="footer-brand">
       <div class="nav-badge" style="width:28px;height:28px;font-size:13px;">🛰</div>
@@ -1149,10 +1200,33 @@
       function draw() { ctx.clearRect(0, 0, c.width, c.height); pts.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = `hsla(${p.hue},90%,65%,${p.a})`; ctx.fill(); p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > c.width) p.vx *= -1; if (p.y < 0 || p.y > c.height) p.vy *= -1; }); for (let i = 0; i < pts.length; i++)for (let j = i + 1; j < pts.length; j++) { const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, d = Math.sqrt(dx * dx + dy * dy); if (d < 90) { ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.strokeStyle = `rgba(0,212,255,${0.06 * (1 - d / 90)})`; ctx.lineWidth = 0.4; ctx.stroke(); } } requestAnimationFrame(draw); }
       draw();
     })();
-    window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60));
+
+    // Nav scroll effect - Updated from about page
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('nav');
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
     const io = new IntersectionObserver(e => { e.forEach(x => { if (x.isIntersecting) x.target.classList.add('in'); }); }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
     document.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const r = document.createElement('span'); r.classList.add('ripple'); const rc = b.getBoundingClientRect(), sz = Math.max(rc.width, rc.height); r.style.cssText = `width:${sz}px;height:${sz}px;left:${e.clientX - rc.left - sz / 2}px;top:${e.clientY - rc.top - sz / 2}px;`; b.appendChild(r); r.addEventListener('animationend', () => r.remove()); });
+
+    // Feature card click effect
+    document.querySelectorAll('.feat-card').forEach(card => {
+      card.addEventListener('click', function () {
+        document.querySelectorAll('.feat-card').forEach(c => c.classList.remove('clicked'));
+        this.classList.add('clicked');
+      });
+    });
+
+    // Scroll hint click
+    document.querySelector('.scroll-hint').addEventListener('click', function () {
+      window.scrollTo({
+        top: window.innerHeight,
+        behavior: 'smooth'
+      });
+    });
   </script>
 </body>
 

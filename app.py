@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash  
 from flask_sqlalchemy import SQLAlchemy 
 from werkzeug.security import generate_password_hash, check_password_hash 
+from functools import wraps
 import os
 import time
 import numpy as np
@@ -21,6 +22,16 @@ app.secret_key = 'secretkey'  # secret key for session management
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # to suppress a warning from SQLAlchemy
 db = SQLAlchemy(app) # initialize the database
+
+# Login required decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Please log in to access this page.', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 # User model
 class User(db.Model):
@@ -118,16 +129,22 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
+# ---------------------------------------------------------
+# 4. ROUTES
+# ---------------------------------------------------------
+
+# Public routes (no login required)
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/upload')
-@app.route('/detector')
-def detector():
-    return render_template('upload.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
-# Combined auth route removed in favor of separate login/register handlers
+@app.route('/contact')
+def contact():
+    return render_template('Contact.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -206,10 +223,34 @@ def logout():
     flash('Logged out successfully.', 'success')
     return redirect('/')
 
+# Protected routes (login required)
+@app.route('/upload')
+@app.route('/detector')
+@login_required
+def detector():
+    return render_template('upload.html')
+
+@app.route('/history')
+@login_required
+def history():
+    return render_template('history.html')
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('Dashboard.html')
+
+@app.route('/support')
+@login_required
+def support():
+    return render_template('support.html')
+
 @app.route('/predict', methods=['GET','POST'])
+@login_required
 def predict():
     file = request.files.get('file')
-    if not file: return redirect('/')
+    if not file: 
+        return redirect('/')
     
     filename = file.filename
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -249,7 +290,5 @@ def predict():
     
     return render_template('predict.html', filename=filename, time=inf_time, stats=stats)
 
-
-        
 if __name__ == '__main__':
     app.run(debug=True)
