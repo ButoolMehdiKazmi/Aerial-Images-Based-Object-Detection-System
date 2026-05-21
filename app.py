@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash  
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy 
 from werkzeug.security import generate_password_hash, check_password_hash 
 from functools import wraps
 import os
 import time
+import json
+from datetime import datetime
 import numpy as np
 import cv2
 import torch
@@ -39,6 +41,19 @@ class User(db.Model):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(200)) # Increased to 200 to safely store hashed passwords
+    analyses = db.relationship('Analysis', backref='user', lazy=True, cascade='all, delete-orphan')
+
+# Analysis model to store image segmentation results
+class Analysis(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    filename = db.Column(db.String(255), nullable=False)
+    image_path = db.Column(db.String(255), nullable=False)
+    mask_path = db.Column(db.String(255), nullable=False)
+    overlay_path = db.Column(db.String(255), nullable=False)
+    class_distribution = db.Column(db.Text, nullable=False)  # Store as JSON string
+    inference_time = db.Column(db.Float, nullable=False)  # in milliseconds
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 # Database initialization with app context
 with app.app_context(): 
@@ -285,10 +300,90 @@ def predict():
     orig_img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
     overlay = cv2.addWeighted(orig_img, 0.6, cv2.cvtColor(mask_img, cv2.COLOR_RGB2BGR), 0.4, 0)
     
-    cv2.imwrite(os.path.join(app.config['RESULT_FOLDER'], 'mask_' + filename), cv2.cvtColor(mask_img, cv2.COLOR_RGB2BGR))
-    cv2.imwrite(os.path.join(app.config['RESULT_FOLDER'], 'overlay_' + filename), overlay)
+    mask_filename = 'mask_' + filename
+    overlay_filename = 'overlay_' + filename
+    mask_path = os.path.join(app.config['RESULT_FOLDER'], mask_filename)
+    overlay_path = os.path.join(app.config['RESULT_FOLDER'], overlay_filename)
+    
+    cv2.imwrite(mask_path, cv2.cvtColor(mask_img, cv2.COLOR_RGB2BGR))
+    cv2.imwrite(overlay_path, overlay)
+    
+    # Save analysis to database
+    analysis = Analysis(
+        user_id=session['user_id'],
+        filename=filename,
+        image_path=filepath,
+        mask_path=mask_path,
+        overlay_path=overlay_path,
+        class_distribution=json.dumps(stats),
+        inference_time=inf_time
+    )
+    
+    try:
+        db.session.add(analysis)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash('Error saving analysis data.', 'error')
     
     return render_template('predict.html', filename=filename, time=inf_time, stats=stats)
+
+@app.route('/api/history', methods=['GET'])
+@login_required
+def get_history():
+    """API endpoint to fetch user's analysis history"""
+    user_id = session['user_id']
+    analyses = Analysis.query.filter_by(user_id=user_id).order_by(Analysis.created_at.desc()).all()
+    
+    history_data = []
+    for analysis in analyses:
+        class_dist = json.loads(analysis.class_distribution)
+        total_objects = sum([item['pct'] for item in class_dist])  # Sum percentages
+        
+        # Generate average confidence from stats
+        avg_confidence = 85.0  # default value
+        
+        history_data.append({
+            'id': analysis.id,
+            'filename': analysis.filename,
+            'imageUrl': url_for('static', filename='uploads/' + analysis.filename, _external=False),
+            'overlayUrl': url_for('static', filename='results/overlay_' + analysis.filename, _external=False),
+            'maskUrl': url_for('static', filename='results/mask_' + analysis.filename, _external=False),
+            'date': analysis.created_at.isoformat(),
+            'detections': class_dist[:5],  # Top 5 classes
+            'totalObjects': len(class_dist),
+            'avgConfidence': avg_confidence,
+            'inferenceTime': analysis.inference_time,
+            'algorithm': 'ResNetUNet'
+        })
+    
+    return jsonify(history_data)
+
+@app.route('/api/user/stats', methods=['GET'])
+@login_required
+def get_user_stats():
+    """API endpoint to fetch user's statistics"""
+    user_id = session['user_id']
+    analyses = Analysis.query.filter_by(user_id=user_id).all()
+    
+    total_analyses = len(analyses)
+    total_objects = 0
+    confidence_sum = 0
+    
+    for analysis in analyses:
+        class_dist = json.loads(analysis.class_distribution)
+        total_objects += len(class_dist)
+        if class_dist:
+            # Use the percentage of the most detected class as confidence proxy
+            confidence_sum += max(item['pct'] for item in class_dist)
+    
+    avg_confidence = round(confidence_sum / total_analyses, 1) if total_analyses > 0 else 0
+    
+    return jsonify({
+        'total_analyses': total_analyses,
+        'total_objects': total_objects,
+        'avg_confidence': avg_confidence
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

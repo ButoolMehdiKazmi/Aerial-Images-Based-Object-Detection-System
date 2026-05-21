@@ -692,32 +692,38 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    // Simulated database of analyses (SQLAlchemy style)
-    let analysisHistory = [
-        { id: 1, filename: "hurricane_damage_01.jpg", imageUrl: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=500&q=80", sector: "disaster", date: "2025-03-18T09:24:00Z", detections: [{type:"Flooded Area", count:4, confidence:96},{type:"Damaged Structure", count:12, confidence:88}], totalObjects: 16, avgConfidence: 92.0, algorithm: "PixelSeg v2.3" },
-        { id: 2, filename: "crop_health_spring.jpg", imageUrl: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=500&q=80", sector: "agriculture", date: "2025-03-20T14:12:00Z", detections: [{type:"Healthy Vegetation", count:245, confidence:94},{type:"Stress Areas", count:18, confidence:82}], totalObjects: 263, avgConfidence: 88.0, algorithm: "MultiSpec NDVI" },
-        { id: 3, filename: "urban_infra_detection.png", imageUrl: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=500&q=80", sector: "urban", date: "2025-03-22T11:05:00Z", detections: [{type:"Vehicles", count:87, confidence:91},{type:"Buildings", count:34, confidence:89}], totalObjects: 121, avgConfidence: 90.0, algorithm: "YOLO-Aerial" },
-        { id: 4, filename: "military_convoy_analysis.jpg", imageUrl: "https://images.unsplash.com/photo-1543253687-c931c8e01820?w=500&q=80", sector: "defense", date: "2025-03-15T06:30:00Z", detections: [{type:"Armored Vehicles", count:9, confidence:97},{type:"Personnel", count:24, confidence:85}], totalObjects: 33, avgConfidence: 91.0, algorithm: "DefenseNet" },
-        { id: 5, filename: "wildfire_perimeter_scan.jpg", imageUrl: "https://images.unsplash.com/photo-1560436603-ca513fa55e0e?w=500&q=80", sector: "disaster", date: "2025-03-10T19:45:00Z", detections: [{type:"Fire Front", count:2, confidence:93},{type:"Smoke Plume", count:5, confidence:89}], totalObjects: 7, avgConfidence: 91.0, algorithm: "ThermalEdge" },
-        { id: 6, filename: "precision_farm_irrigation.jpg", imageUrl: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=500&q=80", sector: "agriculture", date: "2025-03-25T07:20:00Z", detections: [{type:"Irrigation Zones", count:12, confidence:95},{type:"Crop Rows", count:312, confidence:87}], totalObjects: 324, avgConfidence: 91.0, algorithm: "AgriScan" }
-    ];
-
+    // Fetch analysis history from API
+    let analysisHistory = [];
     let currentFilter = "all";
     let searchTerm = "";
+
+    async function fetchHistory() {
+        try {
+            const response = await fetch('/api/history');
+            if (!response.ok) throw new Error('Failed to fetch history');
+            analysisHistory = await response.json();
+            updateStats();
+            renderHistory();
+        } catch (error) {
+            console.error('Error fetching history:', error);
+            document.getElementById('emptyState').style.display = 'block';
+        }
+    }
 
     function updateStats() {
         document.getElementById('totalCount').innerText = analysisHistory.length;
         const totalDet = analysisHistory.reduce((sum, item) => sum + item.totalObjects, 0);
         document.getElementById('totalDetections').innerText = totalDet;
-        const avgGlobal = analysisHistory.reduce((sum, item) => sum + item.avgConfidence, 0) / analysisHistory.length;
+        const avgGlobal = analysisHistory.length > 0 
+            ? analysisHistory.reduce((sum, item) => sum + item.avgConfidence, 0) / analysisHistory.length
+            : 0;
         document.getElementById('avgConf').innerText = Math.round(avgGlobal) + "%";
     }
 
     function renderHistory() {
         const filtered = analysisHistory.filter(item => {
-            const matchFilter = currentFilter === "all" || item.sector === currentFilter;
-            const matchSearch = item.filename.toLowerCase().includes(searchTerm.toLowerCase()) || item.sector.toLowerCase().includes(searchTerm.toLowerCase());
-            return matchFilter && matchSearch;
+            const matchSearch = item.filename.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchSearch;
         });
         const grid = document.getElementById('historyGrid');
         const empty = document.getElementById('emptyState');
@@ -732,7 +738,7 @@
             <div class="history-card" data-id="${item.id}">
                 <div class="card-img">
                     <img src="${item.imageUrl}" alt="${item.filename}" loading="lazy">
-                    <div class="card-badge">${item.sector.toUpperCase()}</div>
+                    <div class="card-badge">ANALYZED</div>
                 </div>
                 <div class="card-content">
                     <div class="card-title">
@@ -740,11 +746,11 @@
                         <span class="date">${new Date(item.date).toLocaleDateString()}</span>
                     </div>
                     <div class="detection-stats">
-                        ${item.detections.slice(0,2).map(d => `<span class="det-badge">${d.type}: ${d.count}</span>`).join('')}
+                        ${item.detections.slice(0,2).map(d => `<span class="det-badge">${d.name}: ${d.pct}%</span>`).join('')}
                         ${item.detections.length > 2 ? `<span class="det-badge">+${item.detections.length-2} more</span>` : ''}
                     </div>
-                    <div class="confidence">⚡ Avg conf: ${item.avgConfidence}% · ${item.totalObjects} objects</div>
-                    <div class="view-details">🔍 Click to view full intelligence report →</div>
+                    <div class="confidence">⚡ Avg conf: ${item.avgConfidence}% · ${item.totalObjects} classes</div>
+                    <div class="view-details">🔍 Click to view full report →</div>
                 </div>
             </div>
         `).join('');
@@ -760,21 +766,21 @@
     
     function openModal(record) {
         const modal = document.getElementById('detailModal');
-        document.getElementById('modalImage').src = record.imageUrl;
+        document.getElementById('modalImage').src = record.overlayUrl;
         document.getElementById('modalTitle').innerText = record.filename;
         document.getElementById('modalDate').innerText = new Date(record.date).toLocaleString();
-        document.getElementById('modalSector').innerHTML = `🛸 Sector: ${record.sector.toUpperCase()}`;
-        const detHtml = `<ul style="list-style: none; display: flex; flex-wrap: wrap; gap: 12px;">${record.detections.map(d => `<li style="background:var(--panel); padding:6px 14px; border-radius:40px;">🔍 ${d.type}: ${d.count} (conf ${d.confidence}%)</li>`).join('')}</ul>`;
+        document.getElementById('modalSector').innerHTML = `📍 Analyzed on: ${new Date(record.date).toLocaleDateString()}`;
+        const detHtml = `<ul style="list-style: none; display: flex; flex-wrap: wrap; gap: 12px;">${record.detections.map(d => `<li style="background:var(--panel); padding:6px 14px; border-radius:40px;">🏷️ ${d.name}: ${d.pct}%</li>`).join('')}</ul>`;
         document.getElementById('modalDetections').innerHTML = detHtml;
         const meta = {
             id: record.id,
             filename: record.filename,
-            sector: record.sector,
             timestamp: record.date,
             algorithm: record.algorithm,
-            total_objects: record.totalObjects,
+            inference_time_ms: record.inferenceTime,
+            total_classes: record.totalObjects,
             average_confidence: record.avgConfidence,
-            detection_list: record.detections
+            class_distribution: record.detections
         };
         document.getElementById('modalJson').innerHTML = JSON.stringify(meta, null, 2);
         modal.style.display = 'flex';
@@ -828,8 +834,8 @@
     const observer = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('in')), { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     
-    updateStats();
-    renderHistory();
+    // Fetch and render history on page load
+    fetchHistory();
 </script>
 
 </body>

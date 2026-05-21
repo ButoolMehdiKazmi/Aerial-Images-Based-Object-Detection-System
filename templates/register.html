@@ -81,7 +81,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font
 .field-lbl{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block;}
 .input-wrap{position:relative;}
 .input-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;opacity:0.45;}
-input[type=email],input[type=password]{
+input[type=email],input[type=password],input[type=text]{
   width:100%;padding:12px 14px 12px 42px;
   background:var(--glass);border:1px solid var(--border);border-radius:10px;
   color:var(--text);font-family:var(--font);font-size:13px;
@@ -174,7 +174,7 @@ input.field-has-ok {border-color:rgba(0,255,179,0.45)!important;}
     <h1 class="form-h">Sign Up Free</h1>
     <p class="form-sub">Already have an account? <a href="{{ url_for('login') }}">Log in →</a></p>
 
-    <!-- Flash messages (e.g. from login page) -->
+    <!-- Flash messages from backend -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% for category, message in messages %}
         <div class="alert alert-{{ category }}">
@@ -184,15 +184,7 @@ input.field-has-ok {border-color:rgba(0,255,179,0.45)!important;}
       {% endfor %}
     {% endwith %}
 
-    <!-- General server error -->
-    {% if errors is defined and errors.general %}
-      <div class="alert alert-error">
-        <span class="alert-icon">✕</span>
-        <span>{{ errors.general }}</span>
-      </div>
-    {% endif %}
-
-    <!-- REGISTER FORM — only email, password, confirm password -->
+    <!-- REGISTER FORM -->
     <form method="POST" action="{{ url_for('register') }}" id="regForm" novalidate>
       <div class="field">
         <label class="field-lbl">Name</label>
@@ -202,12 +194,8 @@ input.field-has-ok {border-color:rgba(0,255,179,0.45)!important;}
                  name="name"
                  id="name"
                  placeholder="Name"
-                 value="{{ form.name if form is defined else '' }}"
-                 class="{{ 'field-has-err' if errors is defined and errors.name else '' }}">
+                 required>
         </div>
-        {% if errors is defined and errors.name %}
-          <div class="field-err-msg">{{ errors.name }}</div>
-        {% endif %}
       </div>
       <!-- Email -->
       <div class="field">
@@ -219,12 +207,8 @@ input.field-has-ok {border-color:rgba(0,255,179,0.45)!important;}
                  id="reg-email"
                  placeholder="you@domain.com"
                  autocomplete="email"
-                 value="{{ form.email if form is defined else '' }}"
-                 class="{{ 'field-has-err' if errors is defined and errors.email else '' }}">
+                 required>
         </div>
-        {% if errors is defined and errors.email %}
-          <div class="field-err-msg">{{ errors.email }}</div>
-        {% endif %}
       </div>
 
       <!-- Password -->
@@ -237,12 +221,9 @@ input.field-has-ok {border-color:rgba(0,255,179,0.45)!important;}
                  id="reg-pass"
                  placeholder="Create a strong password"
                  autocomplete="new-password"
-                 class="{{ 'field-has-err' if errors is defined and errors.password else '' }}">
+                 required>
           <button type="button" class="eye-btn" id="eye1" onclick="togglePwd('reg-pass','eye1')">👁</button>
         </div>
-        {% if errors is defined and errors.password %}
-          <div class="field-err-msg">{{ errors.password }}</div>
-        {% endif %}
       </div>
 
       <!-- Confirm Password -->
@@ -255,14 +236,10 @@ input.field-has-ok {border-color:rgba(0,255,179,0.45)!important;}
                  id="reg-pass2"
                  placeholder="Repeat your password"
                  autocomplete="new-password"
-                 class="{{ 'field-has-err' if errors is defined and errors.confirm_password else '' }}">
+                 required>
           <button type="button" class="eye-btn" id="eye2" onclick="togglePwd('reg-pass2','eye2')">👁</button>
         </div>
-        {% if errors is defined and errors.confirm_password %}
-          <div class="field-err-msg">{{ errors.confirm_password }}</div>
-        {% else %}
-          <div class="field-ok-msg" id="ok-pass2" style="display:none;">✓ Passwords match</div>
-        {% endif %}
+        <div class="field-ok-msg" id="ok-pass2" style="display:none;">✓ Passwords match</div>
       </div>
 
       <!-- Submit -->
@@ -314,7 +291,7 @@ document.addEventListener('click', e => {
   r.style.cssText = `width:${sz}px;height:${sz}px;left:${e.clientX-rc.left-sz/2}px;top:${e.clientY-rc.top-sz/2}px;`;
   b.appendChild(r);
   r.addEventListener('animationend', () => r.remove());
-});
+}); 
 
 /* eye toggle */
 function togglePwd(id, btnId) {
